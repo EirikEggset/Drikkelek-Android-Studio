@@ -27,6 +27,18 @@ public class Question {
         return help;
     }
 
+    public String getColor() {
+        switch (type) {
+            case "Spørsmål":
+                return "@color/red";
+            case "Pekelek":
+                return "@color/blue";
+            case "Tommel opp/ned":
+                return "@color/blue";
+        }
+        return "@color/main_accent";
+    }
+
     public String[] getCategories() {
         return categories;
     }
