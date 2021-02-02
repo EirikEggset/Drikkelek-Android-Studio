@@ -1,0 +1,236 @@
+package com.example.drikkelek;
+
+import android.os.Build;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TableLayout;
+import android.widget.TextView;
+
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+
+public class DrinkingGame extends AppCompatActivity {
+    private Button btnContinue;
+    private Button btnNextQuestion;
+    private Button btnAddPlayer;
+    private TableLayout tablePlayers;
+    private TextView type;
+    private TextView content;
+    private int counter = 0;
+    private int playerCounter = 2;
+    private com.example.app.Question[] questions = new com.example.app.Question[0];
+    private com.example.app.Question[] questionsTemp;
+    private String[] playerNames = new String[0];
+    private EditText[] playerViews;
+    String randomPlayer;
+    String randomPlayer2;
+
+    EditText player1;
+    EditText player2;
+    EditText player3;
+    EditText player4;
+    EditText player5;
+    EditText player6;
+    EditText player7;
+    EditText player8;
+    EditText player9;
+    EditText player10;
+
+
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.drinking_game_choose_players);
+        btnAddPlayer = findViewById(R.id.btn_add_player);
+        btnContinue = findViewById(R.id.btn_drinking_game_continue);
+        tablePlayers = findViewById(R.id.table_players);
+
+         player1 = findViewById(R.id.player_name_1);
+         player2 = findViewById(R.id.player_name_2);
+         player3 = findViewById(R.id.player_name_3);
+         player4 = findViewById(R.id.player_name_4);
+         player5 = findViewById(R.id.player_name_5);
+         player6 = findViewById(R.id.player_name_6);
+         player7 = findViewById(R.id.player_name_7);
+         player8 = findViewById(R.id.player_name_8);
+         player9 = findViewById(R.id.player_name_9);
+         player10 = findViewById(R.id.player_name_10);
+
+        playerViews = new EditText[]{
+                player1,
+                player2,
+                player3,
+                player4,
+                player5,
+                player6,
+                player7,
+                player8,
+                player9,
+                player10
+        };
+
+
+        btnContinue.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+            @Override
+            public void onClick(View v) {
+                createClasses();
+                setUpPlayers();
+                setContentView(R.layout.drinking_game);
+                type =  findViewById(R.id.type_view);
+                content = findViewById((R.id.content_view));
+
+
+                //Randomizes question order
+                Random rnd = ThreadLocalRandom.current();
+                for (int i = questions.length - 1; i > 0; i--) {
+                    int index = rnd.nextInt(i + 1);
+                    com.example.app.Question a = questions[index];
+                    questions[index] = questions[i];
+                    questions[i] = a;
+                }
+                setUpNextButton();
+                newQuestion();
+            }
+        });
+
+        btnAddPlayer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                playerViews[playerCounter].setVisibility(View.VISIBLE);
+                playerViews[playerCounter - 1].setImeOptions(EditorInfo.IME_ACTION_NEXT);
+                playerViews[playerCounter].setImeOptions(EditorInfo.IME_ACTION_DONE);
+                playerCounter++;
+            }
+        });
+
+    }
+
+
+    private void newQuestion() {
+        if (counter < questions.length) {
+            randomPlayer = playerNames[ThreadLocalRandom.current().nextInt(0, playerCounter)];
+            randomPlayer2 = playerNames[ThreadLocalRandom.current().nextInt(0, playerCounter)];
+
+            while (randomPlayer == randomPlayer2) {
+                randomPlayer2 = playerNames[ThreadLocalRandom.current().nextInt(0, playerCounter)];
+            }
+
+
+
+            type.setText(questions[counter].getType());
+            String questionContent = questions[counter].getContent();
+            if (questionContent.contains("spiller1")) {
+                questionContent = questionContent.replace("spiller1" , randomPlayer);
+            }
+            if (questionContent.contains("spiller2")) {
+                questionContent = questionContent.replace("spiller2" , randomPlayer2);
+            }
+
+            content.setText(questionContent);
+            counter++;
+        } else {
+            finish();
+        }
+    }
+
+
+
+    private void setUpNextButton() {
+        btnNextQuestion = findViewById(R.id.btn_next_question);
+        btnNextQuestion.setOnClickListener(v -> {
+            newQuestion();
+        });
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    private void createClasses() {
+        com.example.app.Question question;
+
+        InputStream is = getResources().openRawResource(R.raw.questions);
+
+        BufferedReader reader = new BufferedReader (
+                new InputStreamReader(is, Charset.defaultCharset())
+        );
+
+        String line = "";
+        try {
+            while ((line = reader.readLine()) != null) {
+                String[] elements = line.split(",");
+                String type = elements[0];;
+                String content = elements[1];
+                String[] categories = elements[2].split(";");
+                String help;
+
+                int length = questions.length;
+                questionsTemp = questions;
+                questions = new com.example.app.Question[questionsTemp.length + 1];
+                for (int i = 0; i < questions.length; i++) {
+                    if (i == questionsTemp.length) {
+                        questions[i] = new com.example.app.Question(type, content, categories);
+                    }
+                    else {
+                        questions[i] = questionsTemp[i];
+                    }
+                }
+
+            }
+        } catch (IOException e) {
+            Log.wtf("DrinkingGame", "Error reading data file", e);
+            e.printStackTrace();
+        }
+    }
+
+    private void reset() {
+        setContentView(R.layout.drinking_game_choose_players);
+        counter = 0;
+        playerCounter = 0;
+        questions = new com.example.app.Question[0];
+    }
+
+    private void setUpPlayers() {
+        String[] playersTemp = {
+            player1.getText().toString().trim(),
+            player2.getText().toString().trim(),
+            player3.getText().toString().trim(),
+            player4.getText().toString().trim(),
+            player5.getText().toString().trim(),
+            player6.getText().toString().trim(),
+            player7.getText().toString().trim(),
+            player8.getText().toString().trim(),
+            player9.getText().toString().trim(),
+            player10.getText().toString().trim()
+            };
+
+
+        playerCounter = 0;
+
+        for (String name : playersTemp) {
+            if (!(name.isEmpty())) {
+                playerCounter++;
+            }
+        }
+        playerNames = new String[playerCounter];
+
+        for (int i = 0; i < playerNames.length; i++) {
+            playerNames[i] = playersTemp[i];
+        }
+
+        System.out.println("Names added" + playerNames[0] + ", " + playerNames[1] + ", playerCounter:" + playerCounter);
+
+    }
+}

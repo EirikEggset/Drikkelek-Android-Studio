@@ -1,0 +1,27 @@
+<resources>
+    <!-- Main -->
+    <string name="app_name">Drikkelek</string>
+    <string name="button">Button</string>
+    <string name="title_main">Velg et spill</string>
+    <string name="drinking_game_btn">Blanding</string>
+    <string name="test">Test</string>
+    <string name="test_text">Premier League</string>
+
+    <!-- Drinking game -->
+    <string name="how_many_players_title">Legg til spillere</string>
+    <string name="add_name">Skriv inn navn...</string>
+    <string name="player">Spiller</string>
+    <string name="player_1">Spiller 1</string>
+    <string name="player_2">Spiller 2</string>
+    <string name="player_3">Spiller 3</string>
+    <string name="player_4">Spiller 4</string>
+    <string name="player_5">Spiller 5</string>
+    <string name="player_6">Spiller 6</string>
+    <string name="player_7">Spiller 7</string>
+    <string name="player_8">Spiller 8</string>
+    <string name="player_9">Spiller 9</string>
+    <string name="continue_btn">Fortsett</string>
+    <string name="next_question">Neste</string>
+    <string name="title_activity_drinking_game">Drikkelek</string>
+    <string name="player_10">Spiller 10</string>
+</resources>
