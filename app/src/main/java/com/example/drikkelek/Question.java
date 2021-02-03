@@ -30,11 +30,11 @@ public class Question {
     public String getColor() {
         switch (type) {
             case "Spørsmål":
-                return "@color/red";
+                return "#FB6580"; //red
             case "Pekelek":
-                return "@color/blue";
+                return "#0065C1"; //blue
             case "Tommel opp/ned":
-                return "@color/blue";
+                return "#00DC0C"; //green
         }
         return "@color/main_accent";
     }

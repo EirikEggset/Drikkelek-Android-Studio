@@ -2,11 +2,13 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/add_players_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_weight="0"
     android:background="@color/white"
     android:clickable="true"
+    android:fitsSystemWindows="false"
     android:focusable="true"
     android:focusableInTouchMode="true"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -16,26 +18,39 @@
 
 
     <Button
+        android:id="@+id/btn_add_player"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="@drawable/circle"
+        android:text="+"
+        android:gravity="center"
+        android:textColor="#FFFFFF"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toTopOf="@+id/btn_drinking_game_continue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:rippleColor="@null"/>
+
+    <Button
         android:id="@+id/btn_drinking_game_continue"
-        android:layout_width="match_parent"
-        android:layout_height="140dp"
+        android:layout_width="300dp"
+        android:layout_height="0dp"
+
+        android:layout_marginBottom="8dp"
         android:angle="90"
 
-        android:background="#6F3CCA"
+        android:background="@drawable/rounded_square"
         android:centerColor="#C47CFB"
         android:endColor="#EBD2FF"
-
+        android:fitsSystemWindows="false"
         android:startColor="#961DF3"
         android:text="@string/continue_btn"
         android:textColor="#FFFFFF"
         android:textSize="18sp"
-        app:cornerRadius="0dp"
+        app:cornerRadius="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/table_players"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/title_how_many_players"
@@ -56,8 +71,6 @@
         android:layout_width="301dp"
         android:layout_height="446dp"
         android:layout_marginTop="30dp"
-        android:layout_marginBottom="2dp"
-        app:layout_constraintBottom_toTopOf="@+id/btn_drinking_game_continue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title_how_many_players">
@@ -209,21 +222,16 @@
 
     </TableLayout>
 
-    <Button
-        android:id="@+id/btn_add_player"
-        android:layout_width="55dp"
-        android:layout_height="66dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="25dp"
-        android:text="+"
-        android:textColor="#FFFFFF"
-        android:textSize="30sp"
-        app:cornerRadius="100dp"
-        app:layout_constraintBottom_toTopOf="@+id/btn_drinking_game_continue"
+    <TextView
+        android:id="@+id/add_players_error"
+        android:layout_width="300dp"
+        android:layout_height="22dp"
+        android:textAlignment="center"
+        android:textColor="@color/red"
+        app:layout_constraintBottom_toTopOf="@+id/table_players"
         app:layout_constraintEnd_toEndOf="parent"
-        app:rippleColor="@null"
-        app:strokeColor="@color/white"
-        app:strokeWidth="5dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title_how_many_players" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

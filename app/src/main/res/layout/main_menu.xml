@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="500dp"
         android:text="@string/title_main"
+        android:textColor="@color/main_accent"
         android:textSize="40sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"

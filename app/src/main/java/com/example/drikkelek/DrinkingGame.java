@@ -1,10 +1,13 @@
 package com.example.drikkelek;
 
+import android.content.Context;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TableLayout;
@@ -12,12 +15,14 @@ import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -26,10 +31,14 @@ public class DrinkingGame extends AppCompatActivity {
     private Button btnNextQuestion;
     private Button btnAddPlayer;
     private TableLayout tablePlayers;
+    private ConstraintLayout addPlayersLayout;
+    private ConstraintLayout drinkingGameLayout;
     private TextView type;
     private TextView content;
+    private TextView error;
     private int counter = 0;
     private int playerCounter = 2;
+    private boolean enoughPlayers = true;
     private com.example.app.Question[] questions = new com.example.app.Question[0];
     private com.example.app.Question[] questionsTemp;
     private String[] playerNames = new String[0];
@@ -58,6 +67,8 @@ public class DrinkingGame extends AppCompatActivity {
         btnAddPlayer = findViewById(R.id.btn_add_player);
         btnContinue = findViewById(R.id.btn_drinking_game_continue);
         tablePlayers = findViewById(R.id.table_players);
+        error = findViewById(R.id.add_players_error);
+        addPlayersLayout = findViewById(R.id.add_players_layout);
 
          player1 = findViewById(R.id.player_name_1);
          player2 = findViewById(R.id.player_name_2);
@@ -88,12 +99,17 @@ public class DrinkingGame extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onClick(View v) {
-                createClasses();
                 setUpPlayers();
+                if (!enoughPlayers || playerCounter < 2) {
+                    playerCounter = 2;
+                    return;
+                }
+                createClasses();
+
                 setContentView(R.layout.drinking_game);
                 type =  findViewById(R.id.type_view);
                 content = findViewById((R.id.content_view));
-
+                drinkingGameLayout = findViewById(R.id.drinking_game_constraint_layout);
 
                 //Randomizes question order
                 Random rnd = ThreadLocalRandom.current();
@@ -111,14 +127,20 @@ public class DrinkingGame extends AppCompatActivity {
         btnAddPlayer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                playerViews[playerCounter].setVisibility(View.VISIBLE);
-                playerViews[playerCounter - 1].setImeOptions(EditorInfo.IME_ACTION_NEXT);
-                playerViews[playerCounter].setImeOptions(EditorInfo.IME_ACTION_DONE);
-                playerCounter++;
+                if(playerCounter < 10) {
+                    playerViews[playerCounter].setVisibility(View.VISIBLE);
+                    playerViews[playerCounter - 1].setImeOptions(EditorInfo.IME_ACTION_NEXT);
+                    playerViews[playerCounter].setImeOptions(EditorInfo.IME_ACTION_DONE);
+                    playerViews[playerCounter].requestFocus();
+                    playerCounter++;
+                }
             }
         });
 
+
     }
+
+    
 
 
     private void newQuestion() {
@@ -132,6 +154,7 @@ public class DrinkingGame extends AppCompatActivity {
 
 
 
+            drinkingGameLayout.setBackgroundColor(Color.parseColor(questions[counter].getColor()));
             type.setText(questions[counter].getType());
             String questionContent = questions[counter].getContent();
             if (questionContent.contains("spiller1")) {
@@ -157,10 +180,10 @@ public class DrinkingGame extends AppCompatActivity {
         });
     }
 
+
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private void createClasses() {
         com.example.app.Question question;
-
         InputStream is = getResources().openRawResource(R.raw.questions);
 
         BufferedReader reader = new BufferedReader (
@@ -198,7 +221,7 @@ public class DrinkingGame extends AppCompatActivity {
     private void reset() {
         setContentView(R.layout.drinking_game_choose_players);
         counter = 0;
-        playerCounter = 0;
+        playerCounter = 2;
         questions = new com.example.app.Question[0];
     }
 
@@ -216,21 +239,35 @@ public class DrinkingGame extends AppCompatActivity {
             player10.getText().toString().trim()
             };
 
-
         playerCounter = 0;
 
+        error.setText("");
+
+        int nameCounter;
         for (String name : playersTemp) {
+            nameCounter = 0;
+            for (String name2 : playersTemp) {
+                if (name.equals(name2) && name.length() != 0) {
+                    nameCounter++;
+                    if (nameCounter == 2) {
+                        error.setText("Flere spillere kan ikke hete det samme");
+                        playerCounter = 2;
+                        enoughPlayers = false;
+                        return;
+                    }
+                }
+            }
             if (!(name.isEmpty())) {
                 playerCounter++;
             }
         }
         playerNames = new String[playerCounter];
-
-        for (int i = 0; i < playerNames.length; i++) {
+        System.out.println("playerCounter:" + playerCounter);
+        for (int i = 0; i < playerCounter; i++) {
             playerNames[i] = playersTemp[i];
         }
 
-        System.out.println("Names added" + playerNames[0] + ", " + playerNames[1] + ", playerCounter:" + playerCounter);
 
+        enoughPlayers = true;
     }
 }
