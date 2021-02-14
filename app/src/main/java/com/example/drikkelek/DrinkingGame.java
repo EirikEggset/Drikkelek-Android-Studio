@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethod;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,7 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -32,6 +33,7 @@ public class DrinkingGame extends AppCompatActivity {
     private Button btnAddPlayer;
     private TableLayout tablePlayers;
     private ConstraintLayout addPlayersLayout;
+    private ConstraintLayout closeKeyboardLayout;
     private ConstraintLayout drinkingGameLayout;
     private TextView type;
     private TextView content;
@@ -39,9 +41,10 @@ public class DrinkingGame extends AppCompatActivity {
     private int counter = 0;
     private int playerCounter = 2;
     private boolean enoughPlayers = true;
-    private com.example.app.Question[] questions = new com.example.app.Question[0];
-    private com.example.app.Question[] questionsTemp;
+    private Question[] questions = new Question[0];
+    private Question[] questionsTemp;
     private String[] playerNames = new String[0];
+    private InputStream[] categories;
     private EditText[] playerViews;
     String randomPlayer;
     String randomPlayer2;
@@ -69,6 +72,7 @@ public class DrinkingGame extends AppCompatActivity {
         tablePlayers = findViewById(R.id.table_players);
         error = findViewById(R.id.add_players_error);
         addPlayersLayout = findViewById(R.id.add_players_layout);
+        closeKeyboardLayout = findViewById(R.id.close_keyboard);
 
          player1 = findViewById(R.id.player_name_1);
          player2 = findViewById(R.id.player_name_2);
@@ -104,7 +108,7 @@ public class DrinkingGame extends AppCompatActivity {
                     playerCounter = 2;
                     return;
                 }
-                createClasses();
+                createQuestions();
 
                 setContentView(R.layout.drinking_game);
                 type =  findViewById(R.id.type_view);
@@ -115,7 +119,7 @@ public class DrinkingGame extends AppCompatActivity {
                 Random rnd = ThreadLocalRandom.current();
                 for (int i = questions.length - 1; i > 0; i--) {
                     int index = rnd.nextInt(i + 1);
-                    com.example.app.Question a = questions[index];
+                    Question a = questions[index];
                     questions[index] = questions[i];
                     questions[i] = a;
                 }
@@ -133,13 +137,37 @@ public class DrinkingGame extends AppCompatActivity {
                     playerViews[playerCounter].setImeOptions(EditorInfo.IME_ACTION_DONE);
                     playerViews[playerCounter].requestFocus();
                     playerCounter++;
+                    openKeyboard();
                 }
+            }
+        });
+
+
+        closeKeyboardLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                closeKeyboard();
             }
         });
 
 
     }
 
+    private void closeKeyboard() {
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
+    private void openKeyboard() {
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(view, 0);
+        }
+    }
     
 
 
@@ -155,7 +183,7 @@ public class DrinkingGame extends AppCompatActivity {
 
 
             drinkingGameLayout.setBackgroundColor(Color.parseColor(questions[counter].getColor()));
-            type.setText(questions[counter].getType());
+            type.setText(questions[counter].getTitle());
             String questionContent = questions[counter].getContent();
             if (questionContent.contains("spiller1")) {
                 questionContent = questionContent.replace("spiller1" , randomPlayer);
@@ -182,47 +210,62 @@ public class DrinkingGame extends AppCompatActivity {
 
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    private void createClasses() {
-        com.example.app.Question question;
-        InputStream is = getResources().openRawResource(R.raw.questions);
+    private void createQuestions() {
+        Question question;
 
-        BufferedReader reader = new BufferedReader (
-                new InputStreamReader(is, Charset.defaultCharset())
-        );
+        InputStream rule = getResources().openRawResource(R.raw.rule);
+        InputStream thumbs = getResources().openRawResource(R.raw.thumbs_up_or_down);
+        InputStream point = getResources().openRawResource(R.raw.point);
+        InputStream normal = getResources().openRawResource(R.raw.normal);
+        InputStream category = getResources().openRawResource(R.raw.category);
+
+        InputStream is = getResources().openRawResource(R.raw.rule);
+
+        categories = new InputStream[]{rule, thumbs, point, normal, category};
+
 
         String line = "";
-        try {
-            while ((line = reader.readLine()) != null) {
-                String[] elements = line.split(",");
-                String type = elements[0];;
-                String content = elements[1];
-                String[] categories = elements[2].split(";");
-                String help;
 
-                int length = questions.length;
-                questionsTemp = questions;
-                questions = new com.example.app.Question[questionsTemp.length + 1];
-                for (int i = 0; i < questions.length; i++) {
-                    if (i == questionsTemp.length) {
-                        questions[i] = new com.example.app.Question(type, content, categories);
+        for (InputStream file : categories) {
+
+            BufferedReader reader = new BufferedReader (
+                    new InputStreamReader(file, Charset.defaultCharset())
+            );
+
+            try {
+                while ((line = reader.readLine()) != null) {
+                    String[] elements = line.split(",");
+                    String type = elements[0];
+                    String title = elements[1];
+                    String content = elements[2];
+                    String help;
+
+                    int length = questions.length;
+                    questionsTemp = questions;
+                    questions = new Question[questionsTemp.length + 1];
+                    for (int i = 0; i < questions.length; i++) {
+                        if (i == questionsTemp.length) {
+                            questions[i] = new Question(type, title, content);
+                        }
+                        else {
+                            questions[i] = questionsTemp[i];
+                        }
                     }
-                    else {
-                        questions[i] = questionsTemp[i];
-                    }
+
                 }
-
+            } catch (IOException e) {
+                Log.wtf("DrinkingGame", "Error reading data file", e);
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            Log.wtf("DrinkingGame", "Error reading data file", e);
-            e.printStackTrace();
         }
+
     }
 
     private void reset() {
         setContentView(R.layout.drinking_game_choose_players);
         counter = 0;
         playerCounter = 2;
-        questions = new com.example.app.Question[0];
+        questions = new Question[0];
     }
 
     private void setUpPlayers() {
