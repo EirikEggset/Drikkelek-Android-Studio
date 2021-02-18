@@ -1,13 +1,15 @@
 package com.example.drikkelek;
 
 public class Question {
-    private final String type;
-    private final String content;
+    private String type;
+    private String content;
     private String help;
+    private String gameMode;
     private String title;
     private static int totalQuestions;
 
-    public Question(String type,String title, String content) {
+    public Question(String gameMode,String type,String title, String content) {
+        this.gameMode = gameMode;
         this.type = type;
         this.content = content;
         this.title = title;
@@ -18,6 +20,10 @@ public class Question {
 
     public String getTitle() {
         return title;
+    }
+
+    public String getGameMode() {
+        return gameMode;
     }
 
     public String getType() {
@@ -34,15 +40,15 @@ public class Question {
 
     public String getColor() {
         switch (type) {
-            case "Vanlig":
+            case "Normal":
                 return "#FB6580"; //red
-            case "Pekelek":
+            case "Point":
                 return "#50D2C9"; //blue
-            case "Tommel opp/ned":
+            case "Thumbs":
                 return "#50D263"; //green
-            case "Regel":
+            case "Rule":
                 return "#B475DA"; //purple
-            case "Kategorier":
+            case "Category":
                 return "#BFD250"; //yellow
         }
         return "@color/main_accent";

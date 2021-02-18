@@ -43,7 +43,7 @@ public class DrinkingGame extends AppCompatActivity {
     private TextView type;
     private TextView content;
     private TextView error;
-    private String gamemode = "getDrunk";
+    private String gamemode = "Get drunk";
     private int counter = 0;
     private int playerCounter = 2;
     private boolean enoughPlayers = true;
@@ -120,12 +120,12 @@ public class DrinkingGame extends AppCompatActivity {
                     playerCounter = 2;
                     return;
                 }
-                createQuestions();
 
                 setContentView(R.layout.drinking_game);
                 type =  findViewById(R.id.type_view);
                 content = findViewById((R.id.content_view));
                 drinkingGameLayout = findViewById(R.id.drinking_game_constraint_layout);
+                createQuestions();
 
                 //Randomizes question order
                 Random rnd = ThreadLocalRandom.current();
@@ -158,7 +158,7 @@ public class DrinkingGame extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 addPlayersLayout.setBackgroundColor(getResources().getColor(R.color.green));
-                gamemode = "warmUp";
+                gamemode = "Warm up";
             }
         });
 
@@ -166,7 +166,7 @@ public class DrinkingGame extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 addPlayersLayout.setBackgroundColor(getResources().getColor(R.color.secondary_blue));
-                gamemode = "getDrunk";
+                gamemode = "Get drunk";
             }
         });
 
@@ -174,7 +174,7 @@ public class DrinkingGame extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 addPlayersLayout.setBackgroundColor(getResources().getColor(R.color.red));
-                gamemode = "heated";
+                gamemode = "Heated";
             }
         });
 
@@ -248,7 +248,6 @@ public class DrinkingGame extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private void createQuestions() {
         Question question;
-
         InputStream rule = getResources().openRawResource(R.raw.rule);
         InputStream thumbs = getResources().openRawResource(R.raw.thumbs_up_or_down);
         InputStream point = getResources().openRawResource(R.raw.point);
@@ -258,7 +257,6 @@ public class DrinkingGame extends AppCompatActivity {
         InputStream is = getResources().openRawResource(R.raw.rule);
 
         categories = new InputStream[]{rule, thumbs, point, normal, category};
-
 
         String line = "";
 
@@ -271,22 +269,26 @@ public class DrinkingGame extends AppCompatActivity {
             try {
                 while ((line = reader.readLine()) != null) {
                     String[] elements = line.split(",");
-                    String type = elements[0];
-                    String title = elements[1];
-                    String content = elements[2];
-                    String help;
+                    String questionGameMode = elements[0];
+                    String type = elements[1];
+                    String title = elements[2];
+                    String content = elements[3];
 
                     int length = questions.length;
-                    questionsTemp = questions;
-                    questions = new Question[questionsTemp.length + 1];
-                    for (int i = 0; i < questions.length; i++) {
-                        if (i == questionsTemp.length) {
-                            questions[i] = new Question(type, title, content);
-                        }
-                        else {
-                            questions[i] = questionsTemp[i];
+                    if(questionGameMode.equals(gamemode)) {
+                        questionsTemp = questions;
+                        questions = new Question[questionsTemp.length + 1];
+
+                        for (int i = 0; i < questions.length; i++) {
+                            if (i == questionsTemp.length) {
+                                questions[i] = new Question(questionGameMode, type, title, content);
+                            }
+                            else if (i != questionsTemp.length){
+                                questions[i] = questionsTemp[i];
+                            }
                         }
                     }
+
 
                 }
             } catch (IOException e) {
