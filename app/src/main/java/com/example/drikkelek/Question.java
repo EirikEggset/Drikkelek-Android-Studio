@@ -6,6 +6,10 @@ public class Question {
     private String help;
     private String gameMode;
     private String title;
+    private String returnTitle;
+    private String returnContent;
+    private int returnTime;
+    private boolean hasReturn= false;
     private static int totalQuestions;
 
     public Question(String gameMode,String type,String title, String content) {
@@ -17,6 +21,12 @@ public class Question {
         totalQuestions++;
     }
 
+    public void setReturn(String returnTitle, String returnContent, int returnTime) {
+        this.returnTitle = returnTitle;
+        this.returnContent = returnContent;
+        this.returnTime = returnTime;
+        this.hasReturn = true;
+    }
 
     public String getTitle() {
         return title;
@@ -38,9 +48,27 @@ public class Question {
         return help;
     }
 
+    public String getReturnTitle() {
+        return returnTitle;
+    }
+
+    public String getReturnContent() {
+        return returnContent;
+    }
+
+    public int getReturnTime() {
+        return returnTime;
+    }
+
+    public boolean ifHasReturn() {
+        return hasReturn;
+    }
+
     public String getColor() {
         switch (type) {
             case "Normal":
+                return "#FB6580"; //red
+            case "Double":
                 return "#FB6580"; //red
             case "Point":
                 return "#50D2C9"; //blue

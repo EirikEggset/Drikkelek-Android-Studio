@@ -30,6 +30,11 @@ import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class DrinkingGame extends AppCompatActivity {
+
+    //Config
+    private int gameLength = 40; //How many questions per game
+
+
     private Button btnContinue;
     private Button btnNextQuestion;
     private Button btnAddPlayer;
@@ -126,15 +131,6 @@ public class DrinkingGame extends AppCompatActivity {
                 content = findViewById((R.id.content_view));
                 drinkingGameLayout = findViewById(R.id.drinking_game_constraint_layout);
                 createQuestions();
-
-                //Randomizes question order
-                Random rnd = ThreadLocalRandom.current();
-                for (int i = questions.length - 1; i > 0; i--) {
-                    int index = rnd.nextInt(i + 1);
-                    Question a = questions[index];
-                    questions[index] = questions[i];
-                    questions[i] = a;
-                }
                 setUpNextButton();
                 newQuestion();
             }
@@ -208,7 +204,7 @@ public class DrinkingGame extends AppCompatActivity {
 
 
     private void newQuestion() {
-        if (counter < questions.length) {
+        if (counter < questions.length && counter < gameLength) {
             randomPlayer = playerNames[ThreadLocalRandom.current().nextInt(0, playerCounter)];
             randomPlayer2 = playerNames[ThreadLocalRandom.current().nextInt(0, playerCounter)];
 
@@ -273,6 +269,17 @@ public class DrinkingGame extends AppCompatActivity {
                     String type = elements[1];
                     String title = elements[2];
                     String content = elements[3];
+                    String returnTitle = null;
+                    String returnContent = null;
+                    int returnTime = 0;
+                    boolean hasReturn = false;
+
+                    if(elements.length == 7) {
+                        returnTitle = elements[4];
+                        returnContent = elements[5];
+                        returnTime= Integer.parseInt(elements[6]);
+                        hasReturn = true;
+                    }
 
                     int length = questions.length;
                     if(questionGameMode.equals(gamemode)) {
@@ -282,6 +289,9 @@ public class DrinkingGame extends AppCompatActivity {
                         for (int i = 0; i < questions.length; i++) {
                             if (i == questionsTemp.length) {
                                 questions[i] = new Question(questionGameMode, type, title, content);
+                                if (hasReturn) {
+                                    questions[i].setReturn(returnTitle, returnContent, returnTime);
+                                }
                             }
                             else if (i != questionsTemp.length){
                                 questions[i] = questionsTemp[i];
@@ -289,13 +299,41 @@ public class DrinkingGame extends AppCompatActivity {
                         }
                     }
 
-
                 }
             } catch (IOException e) {
                 Log.wtf("DrinkingGame", "Error reading data file", e);
                 e.printStackTrace();
             }
         }
+
+        Random rnd = ThreadLocalRandom.current();
+        for (int i = questions.length - 1; i > 0; i--) {
+            int index = rnd.nextInt(i + 1);
+            Question a = questions[index];
+            questions[index] = questions[i];
+            questions[i] = a;
+        }
+
+        for (int i = 0; i < questions.length; i++) {
+            if(questions[i].ifHasReturn() && i + questions[i].getReturnTime() < questions.length) {
+                questions[i + questions[i].getReturnTime()] = new Question(
+                        questions[i].getGameMode(),
+                        questions[i].getType(),
+                        questions[i].getReturnTitle(),
+                        questions[i].getReturnContent());
+            }
+            else if (questions[i].ifHasReturn()) {
+                if (i + 3 < questions.length) {
+                    gameLength += 2;
+                    questions[i + 2] = new Question(
+                            questions[i].getGameMode(),
+                            questions[i].getType(),
+                            questions[i].getReturnTitle(),
+                            questions[i].getReturnContent());
+                }
+            }
+        }
+
 
     }
 

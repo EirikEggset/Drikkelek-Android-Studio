@@ -2,5 +2,14 @@ Warm up,Normal,Vors,spiller1 må gjøre dette mot spiller2
 Warm up,Normal,Vors,spiller1 må gjøre dette mot spiller2
 Get drunk,Normal,Fylla,spiller1 har du noen ganger?
 Get drunk,Normal,Fylla,spiller1 får lov til dette
-Heated,Normal,Drøyt spørsmål,Et drøyt spørsmål til spiller1
-Heated,Normal,Veldig drøyt,En veldig drøy dare til spiller1
+Heated,Normal,Tomt,Et drøyt spørsmål til spiller1
+Heated,Normal,Tomt,En veldig drøy dare til spiller1
+Heated,Normal,Tomt,Et drøyt spørsmål til spiller1
+Heated,Normal,Tomt,En veldig drøy dare til spiller1
+Heated,Normal,Neste rundes drøyt,Hvem har gjort dette?,Retur drøye,De som ikke har gjort det må gjøre dette,1
+Heated,Normal,2 runders drøyt,Hvem har gjort dette?,2 runders retur drøye,De som ikke har gjort det må gjøre dette,3
+Heated,Normal,1 runders drøyt,Hvem har gjort dette?,1 runders retur drøye,De som ikke har gjort det må gjøre dette,2
+Heated,Normal,1 runders drøyt,Hvem har gjort dette?,1 runders retur drøye,De som ikke har gjort det må gjøre dette,2
+Heated,Normal,1 runders drøyt,Hvem har gjort dette?,1 runders retur drøye,De som ikke har gjort det må gjøre dette,2
+Heated,Normal,1 runders drøyt,Hvem har gjort dette?,1 runders retur drøye,De som ikke har gjort det må gjøre dette,2
+Heated,Normal,1 runders drøyt,Hvem har gjort dette?,1 runders retur drøye,De som ikke har gjort det må gjøre dette,2
