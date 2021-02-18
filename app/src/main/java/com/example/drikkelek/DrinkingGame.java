@@ -6,6 +6,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethod;
 import android.view.inputmethod.InputMethodManager;
@@ -31,6 +33,9 @@ public class DrinkingGame extends AppCompatActivity {
     private Button btnContinue;
     private Button btnNextQuestion;
     private Button btnAddPlayer;
+    private Button btnWarmUp;
+    private Button btnGetDrunk;
+    private Button btnHeated;
     private TableLayout tablePlayers;
     private ConstraintLayout addPlayersLayout;
     private ConstraintLayout closeKeyboardLayout;
@@ -38,6 +43,7 @@ public class DrinkingGame extends AppCompatActivity {
     private TextView type;
     private TextView content;
     private TextView error;
+    private String gamemode = "getDrunk";
     private int counter = 0;
     private int playerCounter = 2;
     private boolean enoughPlayers = true;
@@ -66,6 +72,9 @@ public class DrinkingGame extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.drinking_game_choose_players);
         btnAddPlayer = findViewById(R.id.btn_add_player);
         btnContinue = findViewById(R.id.btn_drinking_game_continue);
@@ -73,6 +82,9 @@ public class DrinkingGame extends AppCompatActivity {
         error = findViewById(R.id.add_players_error);
         addPlayersLayout = findViewById(R.id.add_players_layout);
         closeKeyboardLayout = findViewById(R.id.close_keyboard);
+        btnWarmUp = findViewById(R.id.warm_up);
+        btnGetDrunk = findViewById(R.id.get_drunk);
+        btnHeated = findViewById(R.id.heated);
 
          player1 = findViewById(R.id.player_name_1);
          player2 = findViewById(R.id.player_name_2);
@@ -139,6 +151,30 @@ public class DrinkingGame extends AppCompatActivity {
                     playerCounter++;
                     openKeyboard();
                 }
+            }
+        });
+
+        btnWarmUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addPlayersLayout.setBackgroundColor(getResources().getColor(R.color.green));
+                gamemode = "warmUp";
+            }
+        });
+
+        btnGetDrunk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addPlayersLayout.setBackgroundColor(getResources().getColor(R.color.secondary_blue));
+                gamemode = "getDrunk";
+            }
+        });
+
+        btnHeated.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addPlayersLayout.setBackgroundColor(getResources().getColor(R.color.red));
+                gamemode = "heated";
             }
         });
 

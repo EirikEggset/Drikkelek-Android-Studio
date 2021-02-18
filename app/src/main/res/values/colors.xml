@@ -1,17 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_light">#FF001B</color>
-    <color name="main_accent">#FF001B</color>
-    <color name="accent_secondary">#000000</color>
-    <color name="purple_500">#FF001B</color>
+    <color name="main_accent">#302D95</color>
+    <color name="secondary_accent">#642D95</color>
     <color name="purple_700">#FF001B</color>
-    <color name="purple_dark">#1E0035</color>
     <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="red">#FF001B</color>
-    <color name="green">#30FF00</color>
-    <color name="blue">#27E0FF</color>
+    <color name="white">#E7E7E7</color>
+    <color name="green">#2D9530</color>
+    <color name="secondary_blue">#3D39BC</color>
+    <color name="red">#A50101</color>
 
 </resources>

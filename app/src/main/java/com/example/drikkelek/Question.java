@@ -1,18 +1,23 @@
-package com.example.app;
+package com.example.drikkelek;
 
 public class Question {
     private final String type;
     private final String content;
-    private  String help;
-    private final String[] categories;
-    private   static int totalQuestions;
+    private String help;
+    private String title;
+    private static int totalQuestions;
 
-    public Question(String type, String content, String[] categories) {
+    public Question(String type,String title, String content) {
         this.type = type;
         this.content = content;
-        this.categories = categories;
+        this.title = title;
 
         totalQuestions++;
+    }
+
+
+    public String getTitle() {
+        return title;
     }
 
     public String getType() {
@@ -29,19 +34,20 @@ public class Question {
 
     public String getColor() {
         switch (type) {
-            case "Spørsmål":
+            case "Vanlig":
                 return "#FB6580"; //red
             case "Pekelek":
-                return "#0065C1"; //blue
+                return "#50D2C9"; //blue
             case "Tommel opp/ned":
-                return "#00DC0C"; //green
+                return "#50D263"; //green
+            case "Regel":
+                return "#B475DA"; //purple
+            case "Kategorier":
+                return "#BFD250"; //yellow
         }
         return "@color/main_accent";
     }
 
-    public String[] getCategories() {
-        return categories;
-    }
 
     public static int getTotalQuestions() {
         return totalQuestions;
