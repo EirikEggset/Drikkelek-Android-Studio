@@ -26,6 +26,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -52,8 +53,7 @@ public class DrinkingGame extends AppCompatActivity {
     private int counter = 0;
     private int playerCounter = 2;
     private boolean enoughPlayers = true;
-    private Question[] questions = new Question[0];
-    private Question[] questionsTemp;
+    private ArrayList<Question> questions = new ArrayList<Question>();
     private String[] playerNames = new String[0];
     private InputStream[] categories;
     private EditText[] playerViews;
@@ -204,7 +204,7 @@ public class DrinkingGame extends AppCompatActivity {
 
 
     private void newQuestion() {
-        if (counter < questions.length && counter < gameLength) {
+        if (counter < questions.size() && counter < gameLength) {
             randomPlayer = playerNames[ThreadLocalRandom.current().nextInt(0, playerCounter)];
             randomPlayer2 = playerNames[ThreadLocalRandom.current().nextInt(0, playerCounter)];
 
@@ -214,9 +214,9 @@ public class DrinkingGame extends AppCompatActivity {
 
 
 
-            drinkingGameLayout.setBackgroundColor(Color.parseColor(questions[counter].getColor()));
-            type.setText(questions[counter].getTitle());
-            String questionContent = questions[counter].getContent();
+            drinkingGameLayout.setBackgroundColor(Color.parseColor(questions.get(counter).getColor()));
+            type.setText(questions.get(counter).getTitle());
+            String questionContent = questions.get(counter).getContent();
             if (questionContent.contains("spiller1")) {
                 questionContent = questionContent.replace("spiller1" , randomPlayer);
             }
@@ -262,6 +262,7 @@ public class DrinkingGame extends AppCompatActivity {
                     new InputStreamReader(file, Charset.defaultCharset())
             );
 
+            //Creates arrayList with questions
             try {
                 while ((line = reader.readLine()) != null) {
                     String[] elements = line.split(",");
@@ -274,29 +275,22 @@ public class DrinkingGame extends AppCompatActivity {
                     int returnTime = 0;
                     boolean hasReturn = false;
 
-                    if(elements.length == 7) {
+                    //Checks for return
+                    if(elements.length >= 7) {
                         returnTitle = elements[4];
                         returnContent = elements[5];
                         returnTime= Integer.parseInt(elements[6]);
                         hasReturn = true;
                     }
 
-                    int length = questions.length;
-                    if(questionGameMode.equals(gamemode)) {
-                        questionsTemp = questions;
-                        questions = new Question[questionsTemp.length + 1];
+                    Question newQuestion = new Question(questionGameMode, type, title, content);
+                    if (hasReturn) {
+                        newQuestion.setReturn(returnTitle, returnContent, returnTime);
+                    }
 
-                        for (int i = 0; i < questions.length; i++) {
-                            if (i == questionsTemp.length) {
-                                questions[i] = new Question(questionGameMode, type, title, content);
-                                if (hasReturn) {
-                                    questions[i].setReturn(returnTitle, returnContent, returnTime);
-                                }
-                            }
-                            else if (i != questionsTemp.length){
-                                questions[i] = questionsTemp[i];
-                            }
-                        }
+                    if (newQuestion.getGameMode().equals(gamemode)) {
+                        questions.add(newQuestion);
+                        System.out.println("Question added");
                     }
 
                 }
@@ -306,30 +300,26 @@ public class DrinkingGame extends AppCompatActivity {
             }
         }
 
-        Random rnd = ThreadLocalRandom.current();
-        for (int i = questions.length - 1; i > 0; i--) {
-            int index = rnd.nextInt(i + 1);
-            Question a = questions[index];
-            questions[index] = questions[i];
-            questions[i] = a;
-        }
+        //Randomize order
+        Collections.shuffle(questions);
 
-        for (int i = 0; i < questions.length; i++) {
-            if(questions[i].ifHasReturn() && i + questions[i].getReturnTime() < questions.length) {
-                questions[i + questions[i].getReturnTime()] = new Question(
-                        questions[i].getGameMode(),
-                        questions[i].getType(),
-                        questions[i].getReturnTitle(),
-                        questions[i].getReturnContent());
+        //Sets return questions
+        for (int i = 0; i < questions.size(); i++) {
+            if(questions.get(i).ifHasReturn() && i + questions.get(i).getReturnTime() < questions.size()) {
+                questions.set(i + questions.get(i).getReturnTime(), new Question(
+                        questions.get(i).getGameMode(),
+                        questions.get(i).getType(),
+                        questions.get(i).getReturnTitle(),
+                        questions.get(i).getReturnContent()));
             }
-            else if (questions[i].ifHasReturn()) {
-                if (i + 3 < questions.length) {
+            else if (questions.get(i).ifHasReturn()) {
+                if (i + 3 < questions.size()) {
                     gameLength += 2;
-                    questions[i + 2] = new Question(
-                            questions[i].getGameMode(),
-                            questions[i].getType(),
-                            questions[i].getReturnTitle(),
-                            questions[i].getReturnContent());
+                    questions.set(i + 2, new Question(
+                            questions.get(i).getGameMode(),
+                            questions.get(i).getType(),
+                            questions.get(i).getReturnTitle(),
+                            questions.get(i).getReturnContent()));
                 }
             }
         }
@@ -341,7 +331,7 @@ public class DrinkingGame extends AppCompatActivity {
         setContentView(R.layout.drinking_game_choose_players);
         counter = 0;
         playerCounter = 2;
-        questions = new Question[0];
+        questions.clear();
     }
 
     private void setUpPlayers() {
