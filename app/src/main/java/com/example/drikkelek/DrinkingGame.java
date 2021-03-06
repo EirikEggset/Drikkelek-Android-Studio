@@ -54,7 +54,7 @@ public class DrinkingGame extends AppCompatActivity {
     private int playerCounter = 2;
     private boolean enoughPlayers = true;
     private ArrayList<Question> questions = new ArrayList<Question>();
-    private String[] playerNames = new String[0];
+    private ArrayList<String> playerNames = new ArrayList<String>();
     private InputStream[] categories;
     private EditText[] playerViews;
     String randomPlayer;
@@ -205,11 +205,11 @@ public class DrinkingGame extends AppCompatActivity {
 
     private void newQuestion() {
         if (counter < questions.size() && counter < gameLength) {
-            randomPlayer = playerNames[ThreadLocalRandom.current().nextInt(0, playerCounter)];
-            randomPlayer2 = playerNames[ThreadLocalRandom.current().nextInt(0, playerCounter)];
+            randomPlayer = playerNames.get(ThreadLocalRandom.current().nextInt(0, playerCounter));
+            randomPlayer2 = playerNames.get(ThreadLocalRandom.current().nextInt(0, playerCounter));
 
-            while (randomPlayer == randomPlayer2) {
-                randomPlayer2 = playerNames[ThreadLocalRandom.current().nextInt(0, playerCounter)];
+            while (randomPlayer.equals(randomPlayer2)) {
+                randomPlayer2 = playerNames.get(ThreadLocalRandom.current().nextInt(0, playerCounter));
             }
 
 
@@ -370,10 +370,9 @@ public class DrinkingGame extends AppCompatActivity {
                 playerCounter++;
             }
         }
-        playerNames = new String[playerCounter];
         System.out.println("playerCounter:" + playerCounter);
         for (int i = 0; i < playerCounter; i++) {
-            playerNames[i] = playersTemp[i];
+            playerNames.add(playersTemp[i]);
         }
 
 
