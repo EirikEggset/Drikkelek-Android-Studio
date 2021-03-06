@@ -1,6 +1,7 @@
 package com.example.drikkelek;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -227,6 +228,8 @@ public class DrinkingGame extends AppCompatActivity {
             content.setText(questionContent);
             counter++;
         } else {
+            Intent intent = new Intent(getBaseContext(), DrinkingGame.class);
+            intent.putExtra("playerNames", playerNames);
             finish();
         }
     }
