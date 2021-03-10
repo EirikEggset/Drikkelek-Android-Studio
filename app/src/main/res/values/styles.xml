@@ -26,6 +26,8 @@
         <item name="android:textColorHint">#CBCBCB</item>
         <item name="android:hint">@string/add_name</item>
         <item name="android:fontFamily">@font/actor</item>
+        <item name="android:textSize">25dp</item>
+        <item name="android:gravity">center</item>
 
 
 

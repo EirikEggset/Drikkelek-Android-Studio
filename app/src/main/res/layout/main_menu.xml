@@ -11,33 +11,24 @@
         android:id="@+id/mainHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="500dp"
+        android:layout_marginTop="50dp"
         android:text="@string/title_main"
         android:textColor="@color/white"
         android:textSize="40sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_drinking_game"
-        style="@style/pack_style"
-        android:layout_marginTop="150dp"
-        android:text="@string/drinking_game_btn"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_packs"
+        android:layout_width="410dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="40dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mainHeader" />
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_drinking_game2"
-        style="@style/pack_style"
-        android:text="Spill 2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_drinking_game" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

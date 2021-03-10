@@ -55,7 +55,7 @@ public class DrinkingGame extends AppCompatActivity {
     private int playerCounter = 2;
     private boolean enoughPlayers = true;
     private ArrayList<Question> questions = new ArrayList<Question>();
-    private ArrayList<String> playerNames = new ArrayList<String>();
+    private static ArrayList<String> playerNames = new ArrayList<String>();
     private InputStream[] categories;
     private EditText[] playerViews;
     String randomPlayer;
@@ -84,7 +84,7 @@ public class DrinkingGame extends AppCompatActivity {
         setContentView(R.layout.drinking_game_choose_players);
         btnAddPlayer = findViewById(R.id.btn_add_player);
         btnContinue = findViewById(R.id.btn_drinking_game_continue);
-        tablePlayers = findViewById(R.id.table_players);
+        /*tablePlayers = findViewById(R.id.table_players);*/
         error = findViewById(R.id.add_players_error);
         addPlayersLayout = findViewById(R.id.add_players_layout);
         closeKeyboardLayout = findViewById(R.id.close_keyboard);
@@ -92,7 +92,7 @@ public class DrinkingGame extends AppCompatActivity {
         btnGetDrunk = findViewById(R.id.get_drunk);
         btnHeated = findViewById(R.id.heated);
 
-         player1 = findViewById(R.id.player_name_1);
+         /*player1 = findViewById(R.id.player_name_1);
          player2 = findViewById(R.id.player_name_2);
          player3 = findViewById(R.id.player_name_3);
          player4 = findViewById(R.id.player_name_4);
@@ -101,7 +101,7 @@ public class DrinkingGame extends AppCompatActivity {
          player7 = findViewById(R.id.player_name_7);
          player8 = findViewById(R.id.player_name_8);
          player9 = findViewById(R.id.player_name_9);
-         player10 = findViewById(R.id.player_name_10);
+         player10 = findViewById(R.id.player_name_10);*/
 
         playerViews = new EditText[]{
                 player1,
@@ -228,8 +228,6 @@ public class DrinkingGame extends AppCompatActivity {
             content.setText(questionContent);
             counter++;
         } else {
-            Intent intent = new Intent(getBaseContext(), DrinkingGame.class);
-            intent.putExtra("playerNames", playerNames);
             finish();
         }
     }

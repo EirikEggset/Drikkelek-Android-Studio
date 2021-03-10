@@ -2,6 +2,7 @@ package com.example.drikkelek;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -9,11 +10,19 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements recyclerAdapter.OnPackListener {
     private Button btnDrinkingGame;
+    private ArrayList<Pack> packList;
+    private RecyclerView recyclerView;
 
 
     @Override
@@ -25,22 +34,43 @@ public class MainActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.main_menu);
+        recyclerView = findViewById(R.id.recycler_view_packs);
+        packList = new ArrayList<>();
 
+        setUserInfo();
+        setAdapter();
 
-        btnDrinkingGame = findViewById((R.id.btn_drinking_game));
+    }
 
-        btnDrinkingGame.setOnClickListener(new View.OnClickListener(){
+    private void setAdapter() {
+        recyclerAdapter adapter = new recyclerAdapter(packList, this);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(adapter);
+    }
 
-            @Override
-            public void onClick(View v) {
-                openDrinkingGame();
-            }
-        });
-
+    private void setUserInfo() {
+        packList.add(new Pack("Blanding", "DrinkingGame", new String[]{"category", "normal", "point", "rule", "thumbs_up_or_down"}));
+        packList.add(new Pack("100 Spørsmål", "DrinkingGame", new String[]{"normal", "thumbs_up_or_down"}));
+        packList.add(new Pack("Pekelek", "DrinkingGame", new String[]{"point"}));
+        packList.add(new Pack("Terning", "Dice", new String[0]));
+        packList.add(new Pack("Kings cup", "DrinkingGame", new String[]{"category", "normal", "point", "rule", "thumbs_up_or_down"}));
     }
 
     private void openDrinkingGame() {
         Intent intent = new Intent(this, DrinkingGame.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void onPackClick(int position) {
+        //Checks which activity to open
+        String type = packList.get(position).getActivityType();
+
+        if (type.equals("DrinkingGame")) {
+            Intent intent = new Intent(this, DrinkingGame.class);
+            startActivity(intent);
+        }
     }
 }

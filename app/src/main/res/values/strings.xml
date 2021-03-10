@@ -4,6 +4,11 @@
     <string name="title_main">Velg et spill</string>
     <string name="drinking_game_btn">Blanding</string>
 
+    <!-- Choose players -->
+    <string-array name="Names">
+
+    </string-array>
+
     <!-- Drinking game -->
     <string name="how_many_players_title">Legg til spillere</string>
     <string name="add_name">Skriv inn navn...</string>
