@@ -10,12 +10,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.MyViewHolder> {
+public class PackRecyclerAdapter extends RecyclerView.Adapter<PackRecyclerAdapter.MyViewHolder> {
 
     private ArrayList<Pack> packList;
     private OnPackListener mOnPackListener;
 
-    public recyclerAdapter(ArrayList<Pack> packList, OnPackListener onPackListener) {
+    public PackRecyclerAdapter(ArrayList<Pack> packList, OnPackListener onPackListener) {
         this.packList = packList;
         this.mOnPackListener = onPackListener;
 
@@ -45,13 +45,13 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.MyView
 
     @NonNull
     @Override
-    public recyclerAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public PackRecyclerAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.pack_item, parent, false);
         return new MyViewHolder(itemView, mOnPackListener);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull recyclerAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull PackRecyclerAdapter.MyViewHolder holder, int position) {
         String name = packList.get(position).getPackName();
         holder.packView.setText(name);
 

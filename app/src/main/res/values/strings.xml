@@ -17,4 +17,5 @@
     <string name="heat_button">Drøy</string>
     <string name="warm_up_button">Vorset</string>
     <string name="get_drunk_button">Fylla</string>
+    <string name="dice_title">Terning</string>
 </resources>

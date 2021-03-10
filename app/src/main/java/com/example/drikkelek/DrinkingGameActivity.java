@@ -31,7 +31,7 @@ import java.util.Collections;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class DrinkingGame extends AppCompatActivity {
+public class DrinkingGameActivity extends AppCompatActivity {
 
     //Config
     private int gameLength = 40; //How many questions per game

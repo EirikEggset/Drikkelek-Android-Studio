@@ -2,8 +2,6 @@ package com.example.drikkelek;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -14,12 +12,9 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
 
-public class MainActivity extends AppCompatActivity implements recyclerAdapter.OnPackListener {
+public class MainActivity extends AppCompatActivity implements PackRecyclerAdapter.OnPackListener {
     private Button btnDrinkingGame;
     private ArrayList<Pack> packList;
     private RecyclerView recyclerView;
@@ -43,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements recyclerAdapter.O
     }
 
     private void setAdapter() {
-        recyclerAdapter adapter = new recyclerAdapter(packList, this);
+        PackRecyclerAdapter adapter = new PackRecyclerAdapter(packList, this);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -55,11 +50,10 @@ public class MainActivity extends AppCompatActivity implements recyclerAdapter.O
         packList.add(new Pack("100 Spørsmål", "DrinkingGame", new String[]{"normal", "thumbs_up_or_down"}));
         packList.add(new Pack("Pekelek", "DrinkingGame", new String[]{"point"}));
         packList.add(new Pack("Terning", "Dice", new String[0]));
-        packList.add(new Pack("Kings cup", "DrinkingGame", new String[]{"category", "normal", "point", "rule", "thumbs_up_or_down"}));
     }
 
     private void openDrinkingGame() {
-        Intent intent = new Intent(this, DrinkingGame.class);
+        Intent intent = new Intent(this, DrinkingGameActivity.class);
         startActivity(intent);
     }
 
@@ -69,7 +63,12 @@ public class MainActivity extends AppCompatActivity implements recyclerAdapter.O
         String type = packList.get(position).getActivityType();
 
         if (type.equals("DrinkingGame")) {
-            Intent intent = new Intent(this, DrinkingGame.class);
+            Intent intent = new Intent(this, DrinkingGameActivity.class);
+            startActivity(intent);
+        }
+
+        if (type.equals("Dice")) {
+            Intent intent = new Intent(this, DiceActivity.class);
             startActivity(intent);
         }
     }
