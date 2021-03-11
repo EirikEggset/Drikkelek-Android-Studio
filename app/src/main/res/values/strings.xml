@@ -18,4 +18,6 @@
     <string name="warm_up_button">Vorset</string>
     <string name="get_drunk_button">Fylla</string>
     <string name="dice_title">Terning</string>
+    <string name="manage_players_btn">Spillere</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

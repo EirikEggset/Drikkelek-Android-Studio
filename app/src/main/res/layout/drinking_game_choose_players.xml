@@ -64,17 +64,6 @@
         app:layout_constraintEnd_toStartOf="@+id/get_drunk"
         app:layout_constraintTop_toTopOf="@+id/get_drunk" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_players"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:windowSoftInputMode="adjustPan|adjustResize"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_default="wrap"
-        app:layout_constraintHeight_max="580dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_players_error" />
-
     <TextView
         android:id="@+id/title_how_many_players"
         android:layout_width="wrap_content"
@@ -90,13 +79,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <fragment
+        android:id="@+id/fragment2"
+        android:name="com.example.drikkelek.manage_players_fragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_max="580dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add_players_error" />
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_add_player"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginTop="300dp"
         android:layout_marginEnd="10dp"
-        android:background="@drawable/circle"
+        android:background="@drawable/blue_circle"
         android:gravity="center"
         android:paddingRight="20dp"
         android:paddingBottom="10dp"
@@ -107,12 +107,12 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_remove_player"
+        android:id="@+id/btn_manage_players"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="10dp"
-        android:background="@drawable/circle"
+        android:background="@drawable/blue_circle"
         android:gravity="center"
         android:paddingRight="20dp"
         android:paddingBottom="10dp"

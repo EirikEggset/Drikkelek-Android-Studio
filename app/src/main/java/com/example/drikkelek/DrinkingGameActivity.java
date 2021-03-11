@@ -1,7 +1,7 @@
 package com.example.drikkelek;
 
+import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -9,8 +9,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethod;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,7 +29,6 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class DrinkingGameActivity extends AppCompatActivity {
@@ -47,6 +44,8 @@ public class DrinkingGameActivity extends AppCompatActivity {
     private Button btnWarmUp;
     private Button btnGetDrunk;
     private Button btnHeated;
+    private Button btnManagePlayers;
+    private ConstraintLayout managePlayersLayout;
     private TableLayout tablePlayers;
     private ConstraintLayout addPlayersLayout;
     private ConstraintLayout closeKeyboardLayout;
@@ -56,7 +55,7 @@ public class DrinkingGameActivity extends AppCompatActivity {
     private TextView error;
     private String gamemode = "Get drunk";
     private int counter = 0;
-    private boolean enoughPlayers = true;
+    private boolean managePlayersVisible = false;
     private ArrayList<Question> questions = new ArrayList<>();
     private static ArrayList<Player> playerNames = new ArrayList<>();
     private InputStream[] categories;
@@ -76,11 +75,10 @@ public class DrinkingGameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.drinking_game_choose_players);
         btnAddPlayer = findViewById(R.id.btn_add_player);
-        btnRemovePlayer = (Button) findViewById(R.id.btn_remove_player);
+        btnRemovePlayer = (Button) findViewById(R.id.btn_manage_players);
         btnContinue = findViewById(R.id.btn_drinking_game_continue);
         /*tablePlayers = findViewById(R.id.table_players);*/
         error = findViewById(R.id.add_players_error);
@@ -92,9 +90,7 @@ public class DrinkingGameActivity extends AppCompatActivity {
 
         //Player recyclerView
         recyclerView = findViewById(R.id.recycler_view_players);
-        playerNames = new ArrayList<>();
         adapter = new PlayerRecyclerAdapter(playerNames);
-
         setPlayerInfo();
         setAdapter();
 
@@ -102,7 +98,7 @@ public class DrinkingGameActivity extends AppCompatActivity {
         recyclerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                closeKeyboard();
+                closeKeyboard(DrinkingGameActivity.this);
             }
         });
 
@@ -121,15 +117,45 @@ public class DrinkingGameActivity extends AppCompatActivity {
                     return;
                 }
 
+                //Sets up new layout and variables
                 playerNames = adapter.getPlayerNames();
 
                 setContentView(R.layout.drinking_game);
                 type =  findViewById(R.id.type_view);
                 content = findViewById((R.id.content_view));
                 drinkingGameLayout = findViewById(R.id.drinking_game_constraint_layout);
+                btnManagePlayers = findViewById(R.id.btn_manage_players);
+
+                adapter = new PlayerRecyclerAdapter(playerNames);
+                recyclerView = findViewById(R.id.recycler_view_players);
+                managePlayersLayout = findViewById(R.id.manage_players_layout);
+                setAdapter();
                 createQuestions();
                 setUpNextButton();
                 newQuestion();
+
+                btnManagePlayers.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (managePlayersVisible) {
+                            managePlayersVisible = false;
+                            managePlayersLayout.setVisibility(View.INVISIBLE);
+                            btnManagePlayers.setText((getString(R.string.manage_players_btn)));
+                            closeKeyboard(DrinkingGameActivity.this);
+                        }
+                        else {
+                            managePlayersVisible = true;
+                            managePlayersLayout.setVisibility(View.VISIBLE);
+                            btnManagePlayers.setText("╳");
+                        }
+                    }
+                });
+                managePlayersLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        closeKeyboard(DrinkingGameActivity.this);
+                    }
+                });
             }
         });
 
@@ -187,7 +213,7 @@ public class DrinkingGameActivity extends AppCompatActivity {
         closeKeyboardLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                closeKeyboard();
+                closeKeyboard(DrinkingGameActivity.this);
             }
         });
 
@@ -202,16 +228,21 @@ public class DrinkingGameActivity extends AppCompatActivity {
     }
 
     private void setPlayerInfo() {
-        playerNames.add(new Player());
-        playerNames.add(new Player());
+        if (playerNames.size() == 0) {
+            playerNames.add(new Player());
+            playerNames.add(new Player());
+        }
     }
 
-    private void closeKeyboard() {
-        View view = this.getCurrentFocus();
-        if (view != null) {
-            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    private void closeKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
         }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     private void openKeyboard() {
@@ -232,7 +263,6 @@ public class DrinkingGameActivity extends AppCompatActivity {
             while (randomPlayer.equals(randomPlayer2)) {
                 randomPlayer2 = playerNames.get(ThreadLocalRandom.current().nextInt(0, playerNames.size())).getName();
             }
-
 
 
             drinkingGameLayout.setBackgroundColor(Color.parseColor(questions.get(counter).getColor()));
@@ -257,7 +287,15 @@ public class DrinkingGameActivity extends AppCompatActivity {
     private void setUpNextButton() {
         btnNextQuestion = findViewById(R.id.btn_next_question);
         btnNextQuestion.setOnClickListener(v -> {
-            newQuestion();
+            if (managePlayersVisible) {
+                managePlayersVisible = false;
+                managePlayersLayout.setVisibility(View.INVISIBLE);
+                btnManagePlayers.setText((getString(R.string.manage_players_btn)));
+            }
+            else {
+                newQuestion();
+            }
+            closeKeyboard(this);
         });
     }
 
@@ -293,6 +331,7 @@ public class DrinkingGameActivity extends AppCompatActivity {
                     String content = elements[3];
                     String returnTitle = null;
                     String returnContent = null;
+                    String ruleDisplay;
                     int returnTime = 0;
                     boolean hasReturn = false;
 
@@ -302,6 +341,9 @@ public class DrinkingGameActivity extends AppCompatActivity {
                         returnContent = elements[5];
                         returnTime= Integer.parseInt(elements[6]);
                         hasReturn = true;
+                        if (type.equals("Rule")) {
+                            ruleDisplay = elements[7];
+                        }
                     }
 
                     Question newQuestion = new Question(questionGameMode, type, title, content);
