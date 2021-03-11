@@ -8,11 +8,10 @@
     <TextView
         android:id="@+id/pack_btn"
         style="@style/pack_style"
-        android:layout_width="329dp"
-        android:layout_height="120dp"
+        android:layout_width="300dp"
+        android:layout_height="130dp"
         android:layout_marginStart="40dp"
         android:layout_marginTop="35dp"
-        android:layout_marginEnd="40dp"
         android:layout_marginBottom="35dp"
         android:gravity="center"
         android:text="pack_name"

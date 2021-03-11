@@ -20,6 +20,9 @@ import android.widget.TextView;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -40,6 +43,7 @@ public class DrinkingGameActivity extends AppCompatActivity {
     private Button btnContinue;
     private Button btnNextQuestion;
     private Button btnAddPlayer;
+    private Button btnRemovePlayer;
     private Button btnWarmUp;
     private Button btnGetDrunk;
     private Button btnHeated;
@@ -52,25 +56,18 @@ public class DrinkingGameActivity extends AppCompatActivity {
     private TextView error;
     private String gamemode = "Get drunk";
     private int counter = 0;
-    private int playerCounter = 2;
     private boolean enoughPlayers = true;
-    private ArrayList<Question> questions = new ArrayList<Question>();
-    private static ArrayList<String> playerNames = new ArrayList<String>();
+    private ArrayList<Question> questions = new ArrayList<>();
+    private static ArrayList<Player> playerNames = new ArrayList<>();
     private InputStream[] categories;
     private EditText[] playerViews;
     String randomPlayer;
     String randomPlayer2;
 
-    EditText player1;
-    EditText player2;
-    EditText player3;
-    EditText player4;
-    EditText player5;
-    EditText player6;
-    EditText player7;
-    EditText player8;
-    EditText player9;
-    EditText player10;
+    private RecyclerView recyclerView;
+    PlayerRecyclerAdapter adapter;
+
+
 
 
 
@@ -83,6 +80,7 @@ public class DrinkingGameActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.drinking_game_choose_players);
         btnAddPlayer = findViewById(R.id.btn_add_player);
+        btnRemovePlayer = (Button) findViewById(R.id.btn_remove_player);
         btnContinue = findViewById(R.id.btn_drinking_game_continue);
         /*tablePlayers = findViewById(R.id.table_players);*/
         error = findViewById(R.id.add_players_error);
@@ -92,40 +90,38 @@ public class DrinkingGameActivity extends AppCompatActivity {
         btnGetDrunk = findViewById(R.id.get_drunk);
         btnHeated = findViewById(R.id.heated);
 
-         /*player1 = findViewById(R.id.player_name_1);
-         player2 = findViewById(R.id.player_name_2);
-         player3 = findViewById(R.id.player_name_3);
-         player4 = findViewById(R.id.player_name_4);
-         player5 = findViewById(R.id.player_name_5);
-         player6 = findViewById(R.id.player_name_6);
-         player7 = findViewById(R.id.player_name_7);
-         player8 = findViewById(R.id.player_name_8);
-         player9 = findViewById(R.id.player_name_9);
-         player10 = findViewById(R.id.player_name_10);*/
+        //Player recyclerView
+        recyclerView = findViewById(R.id.recycler_view_players);
+        playerNames = new ArrayList<>();
+        adapter = new PlayerRecyclerAdapter(playerNames);
 
-        playerViews = new EditText[]{
-                player1,
-                player2,
-                player3,
-                player4,
-                player5,
-                player6,
-                player7,
-                player8,
-                player9,
-                player10
-        };
+        setPlayerInfo();
+        setAdapter();
 
+
+        recyclerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                closeKeyboard();
+            }
+        });
 
         btnContinue.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onClick(View v) {
-                setUpPlayers();
-                if (!enoughPlayers || playerCounter < 2) {
-                    playerCounter = 2;
+                int counter = 0;
+                for (int i = 0; i < playerNames.size(); i++) {
+                    if(!(playerNames.get(i).getName().equals(""))) {
+                        counter++;
+                    }
+                }
+                if (counter < 2) {
+                    error.setText("Legg til flere spillere");
                     return;
                 }
+
+                playerNames = adapter.getPlayerNames();
 
                 setContentView(R.layout.drinking_game);
                 type =  findViewById(R.id.type_view);
@@ -140,14 +136,26 @@ public class DrinkingGameActivity extends AppCompatActivity {
         btnAddPlayer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(playerCounter < 10) {
-                    playerViews[playerCounter].setVisibility(View.VISIBLE);
-                    playerViews[playerCounter - 1].setImeOptions(EditorInfo.IME_ACTION_NEXT);
-                    playerViews[playerCounter].setImeOptions(EditorInfo.IME_ACTION_DONE);
-                    playerViews[playerCounter].requestFocus();
-                    playerCounter++;
-                    openKeyboard();
+                playerNames.add(new Player());
+                setAdapter();
+            }
+        });
+
+        btnRemovePlayer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(playerNames.size() <= 2) {
+                    return;
                 }
+                for (int i = 0; i < playerNames.size(); i++) {
+                    if (playerNames.get(i).getName().equals("")) {
+                        playerNames.remove(i);
+                        setAdapter();
+                        return;
+                    }
+                }
+                playerNames.remove(playerNames.size()-1);
+                setAdapter();
             }
         });
 
@@ -186,6 +194,18 @@ public class DrinkingGameActivity extends AppCompatActivity {
 
     }
 
+    private void setAdapter() {
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(adapter);
+    }
+
+    private void setPlayerInfo() {
+        playerNames.add(new Player());
+        playerNames.add(new Player());
+    }
+
     private void closeKeyboard() {
         View view = this.getCurrentFocus();
         if (view != null) {
@@ -206,11 +226,11 @@ public class DrinkingGameActivity extends AppCompatActivity {
 
     private void newQuestion() {
         if (counter < questions.size() && counter < gameLength) {
-            randomPlayer = playerNames.get(ThreadLocalRandom.current().nextInt(0, playerCounter));
-            randomPlayer2 = playerNames.get(ThreadLocalRandom.current().nextInt(0, playerCounter));
+            randomPlayer = playerNames.get(ThreadLocalRandom.current().nextInt(0, playerNames.size())).getName();
+            randomPlayer2 = playerNames.get(ThreadLocalRandom.current().nextInt(0, playerNames.size())).getName();
 
             while (randomPlayer.equals(randomPlayer2)) {
-                randomPlayer2 = playerNames.get(ThreadLocalRandom.current().nextInt(0, playerCounter));
+                randomPlayer2 = playerNames.get(ThreadLocalRandom.current().nextInt(0, playerNames.size())).getName();
             }
 
 
@@ -331,52 +351,6 @@ public class DrinkingGameActivity extends AppCompatActivity {
     private void reset() {
         setContentView(R.layout.drinking_game_choose_players);
         counter = 0;
-        playerCounter = 2;
         questions.clear();
-    }
-
-    private void setUpPlayers() {
-        String[] playersTemp = {
-            player1.getText().toString().trim(),
-            player2.getText().toString().trim(),
-            player3.getText().toString().trim(),
-            player4.getText().toString().trim(),
-            player5.getText().toString().trim(),
-            player6.getText().toString().trim(),
-            player7.getText().toString().trim(),
-            player8.getText().toString().trim(),
-            player9.getText().toString().trim(),
-            player10.getText().toString().trim()
-            };
-
-        playerCounter = 0;
-
-        error.setText("");
-
-        int nameCounter;
-        for (String name : playersTemp) {
-            nameCounter = 0;
-            for (String name2 : playersTemp) {
-                if (name.equals(name2) && name.length() != 0) {
-                    nameCounter++;
-                    if (nameCounter == 2) {
-                        error.setText("Flere spillere kan ikke hete det samme");
-                        playerCounter = 2;
-                        enoughPlayers = false;
-                        return;
-                    }
-                }
-            }
-            if (!(name.isEmpty())) {
-                playerCounter++;
-            }
-        }
-        System.out.println("playerCounter:" + playerCounter);
-        for (int i = 0; i < playerCounter; i++) {
-            playerNames.add(playersTemp[i]);
-        }
-
-
-        enoughPlayers = true;
     }
 }

@@ -11,7 +11,6 @@
     android:fitsSystemWindows="false"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent">
@@ -21,23 +20,21 @@
         android:id="@+id/close_keyboard"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="-157dp"
-        tools:layout_editor_absoluteY="16dp"
-        tools:visibility="invisible">
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp"
+        tools:visibility="invisible"/>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/get_drunk"
         android:layout_width="120dp"
         android:layout_height="80dp"
-        android:layout_marginBottom="80dp"
+        android:layout_marginBottom="15dp"
         android:background="@drawable/game_mode_center_button"
         android:gravity="center"
         android:text="@string/get_drunk_button"
         android:textColor="@color/white"
         android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btn_drinking_game_continue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -45,36 +42,36 @@
         android:id="@+id/heated"
         android:layout_width="100dp"
         android:layout_height="80dp"
-        android:layout_marginBottom="80dp"
 
         android:background="@drawable/game_mode_right_button"
         android:gravity="center"
         android:text="@string/heat_button"
         android:textColor="@color/white"
         android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/get_drunk" />
+        app:layout_constraintStart_toEndOf="@+id/get_drunk"
+        app:layout_constraintTop_toTopOf="@+id/get_drunk" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/warm_up"
         android:layout_width="100dp"
         android:layout_height="80dp"
-        android:layout_marginBottom="80dp"
 
         android:background="@drawable/game_mode_left_button"
         android:gravity="center"
         android:text="@string/warm_up_button"
         android:textColor="@color/white"
         android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/get_drunk" />
+        app:layout_constraintEnd_toStartOf="@+id/get_drunk"
+        app:layout_constraintTop_toTopOf="@+id/get_drunk" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_players"
-        android:layout_width="409dp"
-        android:layout_height="454dp"
-        app:layout_constraintBottom_toTopOf="@+id/get_drunk"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:windowSoftInputMode="adjustPan|adjustResize"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_default="wrap"
+        app:layout_constraintHeight_max="580dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/add_players_error" />
 
@@ -82,7 +79,7 @@
         android:id="@+id/title_how_many_players"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/actor"
         android:text="@string/how_many_players_title"
         android:textAllCaps="false"
@@ -94,13 +91,56 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_add_player"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="300dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/circle"
+        android:gravity="center"
+        android:paddingRight="20dp"
+        android:paddingBottom="10dp"
+        android:text="+"
+        android:textColor="@color/white"
+        android:textSize="25dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_remove_player"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/circle"
+        android:gravity="center"
+        android:paddingRight="20dp"
+        android:paddingBottom="10dp"
+        android:text="-"
+        android:textColor="@color/white"
+        android:textSize="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_add_player" />
+
+    <TextView
+        android:id="@+id/add_players_error"
+        android:layout_width="300dp"
+        android:layout_height="22dp"
+        android:layout_marginTop="10dp"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title_how_many_players" />
+
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_drinking_game_continue"
         android:layout_width="300dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
 
         android:layout_marginBottom="15dp"
         android:angle="90"
-
         android:background="@drawable/rounded_square"
         android:text="@string/continue_btn"
         android:textColor="@color/white"
@@ -110,31 +150,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_add_player"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginBottom="50dp"
-        android:background="@drawable/circle"
-        android:gravity="center"
-        android:paddingRight="20dp"
-        android:paddingBottom="10dp"
-        android:text="+"
-        android:textColor="@color/white"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="@+id/btn_drinking_game_continue"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-    <TextView
-        android:id="@+id/add_players_error"
-        android:layout_width="300dp"
-        android:layout_height="22dp"
-        android:textAlignment="textEnd"
-        android:textColor="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title_how_many_players" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

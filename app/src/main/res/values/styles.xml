@@ -17,7 +17,7 @@
 
     <style name="player_name_style">
         <item name="android:ems">10</item>
-        <item name="android:imeOptions">actionNext</item>
+        <item name="android:imeOptions">actionDone</item>
         <item name="android:inputType">textCapWords</item>
         <item name="android:maxLines">1</item>
         <item name="android:background">@drawable/rounded_square</item>

@@ -25,12 +25,12 @@ public class PackRecyclerAdapter extends RecyclerView.Adapter<PackRecyclerAdapte
         private TextView packView;
         OnPackListener onPackListener;
 
-        public MyViewHolder(final View view, OnPackListener onPackListener) {
-            super(view);
-            packView = view.findViewById(R.id.pack_btn);
+        public MyViewHolder(final View itemView, OnPackListener onPackListener) {
+            super(itemView);
+            packView = itemView.findViewById(R.id.pack_btn);
             this.onPackListener = onPackListener;
 
-            view.setOnClickListener(this);
+            itemView.setOnClickListener(this);
         }
 
         @Override
@@ -54,7 +54,6 @@ public class PackRecyclerAdapter extends RecyclerView.Adapter<PackRecyclerAdapte
     public void onBindViewHolder(@NonNull PackRecyclerAdapter.MyViewHolder holder, int position) {
         String name = packList.get(position).getPackName();
         holder.packView.setText(name);
-
     }
 
     @Override
