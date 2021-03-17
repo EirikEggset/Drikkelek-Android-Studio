@@ -57,10 +57,12 @@ public class DrinkingGameActivity extends AppCompatActivity {
     private TextView content;
     private TextView error;
     private String gamemode = "Get drunk";
-    private int counter = 0;
+    private static int questionCounter = 0; //What question you are on in the list of questions
+    private int gameCounter = 0; //What question you are in the particular game
+
     private boolean menuShown = false;
-    private ArrayList<Question> questions = new ArrayList<>();
-    public static ArrayList<Player> playerNames = new ArrayList<>();
+    private static ArrayList<Question> questions = new ArrayList<>();
+    private static ArrayList<Player> playerNames = new ArrayList<>();
     private InputStream[] categories;
     private EditText[] playerViews;
     String randomPlayer;
@@ -237,6 +239,7 @@ public class DrinkingGameActivity extends AppCompatActivity {
         btnCloseGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                gameCounter = 0;
                 finish();
             }
         });
@@ -285,7 +288,7 @@ public class DrinkingGameActivity extends AppCompatActivity {
 
 
     private void newQuestion() {
-        if (counter < questions.size() && counter < gameLength) {
+        if (questionCounter < questions.size() && gameCounter < gameLength) {
             randomPlayer = playerNames.get(ThreadLocalRandom.current().nextInt(0, playerNames.size())).getName();
             randomPlayer2 = playerNames.get(ThreadLocalRandom.current().nextInt(0, playerNames.size())).getName();
 
@@ -294,9 +297,9 @@ public class DrinkingGameActivity extends AppCompatActivity {
             }
 
 
-            drinkingGameLayout.setBackgroundColor(Color.parseColor(questions.get(counter).getColor()));
-            type.setText(questions.get(counter).getTitle());
-            String questionContent = questions.get(counter).getContent();
+            drinkingGameLayout.setBackgroundColor(Color.parseColor(questions.get(questionCounter).getColor()));
+            type.setText(questions.get(questionCounter).getTitle());
+            String questionContent = questions.get(questionCounter).getContent();
             if (questionContent.contains("spiller1")) {
                 questionContent = questionContent.replace("spiller1" , randomPlayer);
             }
@@ -305,8 +308,12 @@ public class DrinkingGameActivity extends AppCompatActivity {
             }
 
             content.setText(questionContent);
-            counter++;
+            questionCounter++;
+            gameCounter++;
         } else {
+            System.out.println("questionCounter:" + questionCounter + ", gameCounter:" + gameCounter + ", questions.size():" + questions.size());
+            System.out.println("Game finished");
+            gameCounter = 0;
             finish();
         }
     }
@@ -322,6 +329,7 @@ public class DrinkingGameActivity extends AppCompatActivity {
                 managePlayersLayout.setVisibility(View.INVISIBLE);
                 helpLayout.setVisibility(View.INVISIBLE);
                 btnCloseGame.setVisibility(View.VISIBLE);
+                btnHelp.setVisibility(View.VISIBLE);
                 btnManagePlayers.setText((getString(R.string.manage_players_btn)));
                 btnManagePlayers.setWidth(80);
                 btnManagePlayers.setHeight(80);
@@ -336,97 +344,100 @@ public class DrinkingGameActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private void createQuestions() {
-        Question question;
-        InputStream rule = getResources().openRawResource(R.raw.rule);
-        InputStream thumbs = getResources().openRawResource(R.raw.thumbs_up_or_down);
-        InputStream point = getResources().openRawResource(R.raw.point);
-        InputStream normal = getResources().openRawResource(R.raw.normal);
-        InputStream category = getResources().openRawResource(R.raw.category);
 
-        InputStream is = getResources().openRawResource(R.raw.rule);
+        if ((questionCounter + gameLength) > questions.size() || questions.size() == 0) {
+            System.out.println("Creating new questions");
+            questions = new ArrayList<Question>();
+            questionCounter = 0;
+            InputStream rule = getResources().openRawResource(R.raw.rule);
+            InputStream thumbs = getResources().openRawResource(R.raw.thumbs_up_or_down);
+            InputStream point = getResources().openRawResource(R.raw.point);
+            InputStream normal = getResources().openRawResource(R.raw.normal);
+            InputStream category = getResources().openRawResource(R.raw.category);
 
-        categories = new InputStream[]{rule, thumbs, point, normal, category};
+            InputStream is = getResources().openRawResource(R.raw.rule);
 
-        String line = "";
+            categories = new InputStream[]{rule, thumbs, point, normal, category};
 
-        for (InputStream file : categories) {
+            String line = "";
 
-            BufferedReader reader = new BufferedReader (
-                    new InputStreamReader(file, Charset.defaultCharset())
-            );
+            for (InputStream file : categories) {
 
-            //Creates arrayList with questions
-            try {
-                while ((line = reader.readLine()) != null) {
-                    String[] elements = line.split(",");
-                    String questionGameMode = elements[0];
-                    String type = elements[1];
-                    String title = elements[2];
-                    String content = elements[3];
-                    String returnTitle = null;
-                    String returnContent = null;
-                    String ruleDisplay;
-                    int returnTime = 0;
-                    boolean hasReturn = false;
+                BufferedReader reader = new BufferedReader (
+                        new InputStreamReader(file, Charset.defaultCharset())
+                );
 
-                    //Checks for return
-                    if(elements.length >= 7) {
-                        returnTitle = elements[4];
-                        returnContent = elements[5];
-                        returnTime= Integer.parseInt(elements[6]);
-                        hasReturn = true;
-                        if (type.equals("Rule")) {
-                            ruleDisplay = elements[7];
+                //Creates arrayList with questions
+                try {
+                    while ((line = reader.readLine()) != null) {
+                        String[] elements = line.split(",");
+                        String questionGameMode = elements[0];
+                        String type = elements[1];
+                        String title = elements[2];
+                        String content = elements[3];
+                        String returnTitle = null;
+                        String returnContent = null;
+                        String ruleDisplay;
+                        int returnTime = 0;
+                        boolean hasReturn = false;
+
+                        //Checks for return
+                        if(elements.length >= 7) {
+                            returnTitle = elements[4];
+                            returnContent = elements[5];
+                            returnTime= Integer.parseInt(elements[6]);
+                            hasReturn = true;
+                            if (type.equals("Rule")) {
+                                ruleDisplay = elements[7];
+                            }
                         }
-                    }
 
-                    Question newQuestion = new Question(questionGameMode, type, title, content);
-                    if (hasReturn) {
-                        newQuestion.setReturn(returnTitle, returnContent, returnTime);
-                    }
+                        Question newQuestion = new Question(questionGameMode, type, title, content);
+                        if (hasReturn) {
+                            newQuestion.setReturn(returnTitle, returnContent, returnTime);
+                        }
 
-                    if (newQuestion.getGameMode().equals(gamemode)) {
-                        questions.add(newQuestion);
-                        System.out.println("Question added");
-                    }
+                        if (newQuestion.getGameMode().equals(gamemode)) {
+                            questions.add(newQuestion);
+                            System.out.println("Question added");
+                        }
 
+                    }
+                } catch (IOException e) {
+                    Log.wtf("DrinkingGame", "Error reading data file", e);
+                    e.printStackTrace();
                 }
-            } catch (IOException e) {
-                Log.wtf("DrinkingGame", "Error reading data file", e);
-                e.printStackTrace();
             }
-        }
 
-        //Randomize order
-        Collections.shuffle(questions);
+            //Randomize order
+            Collections.shuffle(questions);
 
-        //Sets return questions
-        for (int i = 0; i < questions.size(); i++) {
-            if(questions.get(i).ifHasReturn() && i + questions.get(i).getReturnTime() < questions.size()) {
-                questions.set(i + questions.get(i).getReturnTime(), new Question(
-                        questions.get(i).getGameMode(),
-                        questions.get(i).getType(),
-                        questions.get(i).getReturnTitle(),
-                        questions.get(i).getReturnContent()));
-            }
-            else if (questions.get(i).ifHasReturn()) {
-                if (i + 3 < questions.size()) {
-                    gameLength += 2;
-                    questions.set(i + 2, new Question(
+            //Sets return questions
+            for (int i = 0; i < questions.size(); i++) {
+                if(questions.get(i).ifHasReturn() && i + questions.get(i).getReturnTime() < questions.size()) {
+                    questions.add(i + questions.get(i).getReturnTime(), new Question(
                             questions.get(i).getGameMode(),
                             questions.get(i).getType(),
                             questions.get(i).getReturnTitle(),
                             questions.get(i).getReturnContent()));
                 }
+                else if (questions.get(i).ifHasReturn()) {
+                    if (i + 3 < questions.size()) {
+                        gameLength += 2;
+                        questions.set(i + 2, new Question(
+                                questions.get(i).getGameMode(),
+                                questions.get(i).getType(),
+                                questions.get(i).getReturnTitle(),
+                                questions.get(i).getReturnContent()));
+                    }
+                }
             }
         }
-
-
     }
 
     private void reset() {
         setContentView(R.layout.drinking_game_choose_players);
-        counter = 0;
+        gameCounter = 0;
         questions.clear();
     }
 }
