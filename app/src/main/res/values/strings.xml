@@ -4,6 +4,8 @@
     <string name="title_main">Velg et spill</string>
     <string name="drinking_game_btn">Blanding</string>
 
+    <!--  -->
+
     <!-- Choose players -->
     <string-array name="Names">
 
@@ -20,4 +22,5 @@
     <string name="dice_title">Terning</string>
     <string name="manage_players_btn">Spillere</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="btn_help">Hva?</string>
 </resources>

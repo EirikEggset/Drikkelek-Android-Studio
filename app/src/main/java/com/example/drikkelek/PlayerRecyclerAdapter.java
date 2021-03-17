@@ -5,6 +5,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
@@ -22,10 +23,22 @@ public class PlayerRecyclerAdapter extends RecyclerView.Adapter<PlayerRecyclerAd
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         private EditText newNameText;
+        private Button removePlayerBtn;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             newNameText = itemView.findViewById(R.id.new_player_name);
+            removePlayerBtn = itemView.findViewById(R.id.btn_remove_player);
+
+            removePlayerBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (playerNames.size() > 2) {
+                        playerNames.remove(getAdapterPosition());
+                        notifyItemRemoved(getAdapterPosition());
+                    }
+                }
+            });
             //Adds players as EditText is changed
             newNameText.addTextChangedListener(new TextWatcher() {
                 @Override

@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
     <item>
         <shape android:shape="oval">
             <!--            modify color to match your preferences-->
-            <solid android:color="@color/main_accent"/>
+            <solid android:color="@color/gray"/>
             <corners android:radius="80dp"/>
             <size android:width="55dp" android:height="55dp"/>
             <padding android:left="20dp"
                 android:right="8dp"
                 android:top="8dp"
                 android:bottom="8dp"/>
-            <stroke android:width="2dp" android:color="@color/white"/>
         </shape>
     </item>
-</layer-list>
+
+</selector>

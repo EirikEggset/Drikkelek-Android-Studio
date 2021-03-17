@@ -45,7 +45,10 @@ public class DrinkingGameActivity extends AppCompatActivity {
     private Button btnGetDrunk;
     private Button btnHeated;
     private Button btnManagePlayers;
+    private Button btnCloseGame;
+    private Button btnHelp;
     private ConstraintLayout managePlayersLayout;
+    private ConstraintLayout helpLayout;
     private TableLayout tablePlayers;
     private ConstraintLayout addPlayersLayout;
     private ConstraintLayout closeKeyboardLayout;
@@ -55,9 +58,9 @@ public class DrinkingGameActivity extends AppCompatActivity {
     private TextView error;
     private String gamemode = "Get drunk";
     private int counter = 0;
-    private boolean managePlayersVisible = false;
+    private boolean menuShown = false;
     private ArrayList<Question> questions = new ArrayList<>();
-    private static ArrayList<Player> playerNames = new ArrayList<>();
+    public static ArrayList<Player> playerNames = new ArrayList<>();
     private InputStream[] categories;
     private EditText[] playerViews;
     String randomPlayer;
@@ -117,45 +120,7 @@ public class DrinkingGameActivity extends AppCompatActivity {
                     return;
                 }
 
-                //Sets up new layout and variables
-                playerNames = adapter.getPlayerNames();
-
-                setContentView(R.layout.drinking_game);
-                type =  findViewById(R.id.type_view);
-                content = findViewById((R.id.content_view));
-                drinkingGameLayout = findViewById(R.id.drinking_game_constraint_layout);
-                btnManagePlayers = findViewById(R.id.btn_manage_players);
-
-                adapter = new PlayerRecyclerAdapter(playerNames);
-                recyclerView = findViewById(R.id.recycler_view_players);
-                managePlayersLayout = findViewById(R.id.manage_players_layout);
-                setAdapter();
-                createQuestions();
-                setUpNextButton();
-                newQuestion();
-
-                btnManagePlayers.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (managePlayersVisible) {
-                            managePlayersVisible = false;
-                            managePlayersLayout.setVisibility(View.INVISIBLE);
-                            btnManagePlayers.setText((getString(R.string.manage_players_btn)));
-                            closeKeyboard(DrinkingGameActivity.this);
-                        }
-                        else {
-                            managePlayersVisible = true;
-                            managePlayersLayout.setVisibility(View.VISIBLE);
-                            btnManagePlayers.setText("╳");
-                        }
-                    }
-                });
-                managePlayersLayout.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        closeKeyboard(DrinkingGameActivity.this);
-                    }
-                });
+                drinkingGameOnStart();
             }
         });
 
@@ -163,24 +128,6 @@ public class DrinkingGameActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 playerNames.add(new Player());
-                setAdapter();
-            }
-        });
-
-        btnRemovePlayer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(playerNames.size() <= 2) {
-                    return;
-                }
-                for (int i = 0; i < playerNames.size(); i++) {
-                    if (playerNames.get(i).getName().equals("")) {
-                        playerNames.remove(i);
-                        setAdapter();
-                        return;
-                    }
-                }
-                playerNames.remove(playerNames.size()-1);
                 setAdapter();
             }
         });
@@ -219,8 +166,90 @@ public class DrinkingGameActivity extends AppCompatActivity {
 
 
     }
+    
+    public void drinkingGameOnStart() {
+        //Sets up new layout and variables
+        playerNames = adapter.getPlayerNames();
 
-    private void setAdapter() {
+        setContentView(R.layout.drinking_game);
+        type =  findViewById(R.id.type_view);
+        content = findViewById((R.id.content_view));
+        drinkingGameLayout = findViewById(R.id.drinking_game_constraint_layout);
+        helpLayout = findViewById(R.id.help_layout);
+        btnAddPlayer = findViewById(R.id.btn_add_player);
+        btnManagePlayers = findViewById(R.id.btn_manage_players);
+        btnCloseGame = findViewById(R.id.btn_close_game);
+        btnHelp = findViewById(R.id.btn_help);
+        adapter = new PlayerRecyclerAdapter(playerNames);
+        recyclerView = findViewById(R.id.recycler_view_players);
+        managePlayersLayout = findViewById(R.id.manage_players_layout);
+        setAdapter();
+        createQuestions();
+        setUpNextButton();
+        newQuestion();
+
+        btnManagePlayers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (menuShown) {
+                    menuShown = false;
+                    managePlayersLayout.setVisibility(View.INVISIBLE);
+                    helpLayout.setVisibility(View.INVISIBLE);
+                    btnCloseGame.setVisibility(View.VISIBLE);
+                    btnHelp.setVisibility(View.VISIBLE);
+                    btnManagePlayers.setText((getString(R.string.manage_players_btn)));
+                    btnManagePlayers.setWidth(80);
+                    btnManagePlayers.setHeight(80);
+                    closeKeyboard(DrinkingGameActivity.this);
+                }
+                else {
+                    menuShown = true;
+                    managePlayersLayout.setVisibility(View.VISIBLE);
+                    btnCloseGame.setVisibility(View.INVISIBLE);
+                    btnHelp.setVisibility(View.INVISIBLE);
+                    btnManagePlayers.setText("╳");
+                    btnManagePlayers.bringToFront();
+                    btnManagePlayers.setWidth(40);
+                    btnManagePlayers.setHeight(40);
+                }
+            }
+        });
+        btnAddPlayer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                playerNames.add(new Player());
+                setAdapter();
+            }
+        });
+        btnHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                menuShown = true;
+                helpLayout.setVisibility(View.VISIBLE);
+                btnCloseGame.setVisibility(View.VISIBLE);
+                btnHelp.setVisibility(View.INVISIBLE);
+                btnManagePlayers.setText("╳");
+                btnManagePlayers.setWidth(40);
+                btnManagePlayers.setHeight(40);
+
+            }
+        });
+        btnCloseGame.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        managePlayersLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                closeKeyboard(DrinkingGameActivity.this);
+            }
+        });
+
+    }
+
+    public void setAdapter() {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -287,15 +316,20 @@ public class DrinkingGameActivity extends AppCompatActivity {
     private void setUpNextButton() {
         btnNextQuestion = findViewById(R.id.btn_next_question);
         btnNextQuestion.setOnClickListener(v -> {
-            if (managePlayersVisible) {
-                managePlayersVisible = false;
+            if (menuShown) {
+                closeKeyboard(this);
+                menuShown = false;
                 managePlayersLayout.setVisibility(View.INVISIBLE);
+                helpLayout.setVisibility(View.INVISIBLE);
+                btnCloseGame.setVisibility(View.VISIBLE);
                 btnManagePlayers.setText((getString(R.string.manage_players_btn)));
+                btnManagePlayers.setWidth(80);
+                btnManagePlayers.setHeight(80);
             }
             else {
                 newQuestion();
             }
-            closeKeyboard(this);
+
         });
     }
 

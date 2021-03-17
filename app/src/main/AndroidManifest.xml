@@ -16,8 +16,12 @@
             android:name=".DrinkingGameActivity"
             android:label="@string/title_activity_drinking_game"
             android:theme="@style/Theme.Drikkelek"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".MainActivity">
+            android:windowSoftInputMode="adjustPan"
+            android:configChanges="orientation|screenSize|keyboardHidden"/>
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/Theme.Drikkelek">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

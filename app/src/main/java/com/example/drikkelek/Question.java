@@ -9,6 +9,7 @@ public class Question {
     private String returnTitle;
     private String returnContent;
     private int returnTime;
+    private boolean hasHelp = false;
     private boolean hasReturn= false;
     private static int totalQuestions;
 
@@ -26,6 +27,10 @@ public class Question {
         this.returnContent = returnContent;
         this.returnTime = returnTime;
         this.hasReturn = true;
+    }
+
+    public boolean isHasHelp() {
+        return hasHelp;
     }
 
     public String getTitle() {
