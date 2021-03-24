@@ -1,17 +1,20 @@
 package com.example.drikkelek;
 
 public class Question {
-    private String type;
-    private String content;
+    private final String type;
+    private final String content;
     private String help;
-    private String gameMode;
-    private String title;
+    private final String gameMode;
+    private final String title;
     private String returnTitle;
     private String returnContent;
     private int returnTime;
     private boolean hasHelp = false;
-    private boolean hasReturn= false;
+    private boolean hasReturn = false;
+    private boolean hasRule = false;
+    private boolean isReturnRule = false;
     private static int totalQuestions;
+    private Rule rule = new Rule("Tom");
 
     public Question(String gameMode,String type,String title, String content) {
         this.gameMode = gameMode;
@@ -98,5 +101,31 @@ public class Question {
 
     public static void setTotalQuestions(int totalQuestions) {
         Question.totalQuestions = totalQuestions;
+    }
+
+    public Rule getRule() {
+        return rule;
+    }
+
+    public void setRule(Rule rule) {
+        this.rule = rule;
+        hasRule = true;
+    }
+
+    public boolean hasRule() {
+        return hasRule;
+    }
+
+    public void setHasRule(boolean bool) {
+        hasRule = bool;
+    }
+
+    public boolean isReturnRule() {
+        return isReturnRule;
+    }
+
+    public void setIsReturnRule(Rule rule){
+        this.rule = rule;
+        isReturnRule = true;
     }
 }

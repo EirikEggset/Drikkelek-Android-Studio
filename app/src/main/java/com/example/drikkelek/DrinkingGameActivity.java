@@ -53,6 +53,7 @@ public class DrinkingGameActivity extends AppCompatActivity {
     private ConstraintLayout addPlayersLayout;
     private ConstraintLayout closeKeyboardLayout;
     private ConstraintLayout drinkingGameLayout;
+    private ConstraintLayout ruleLayout;
     private TextView type;
     private TextView content;
     private TextView error;
@@ -69,11 +70,10 @@ public class DrinkingGameActivity extends AppCompatActivity {
     String randomPlayer2;
 
     private RecyclerView recyclerView;
-    PlayerRecyclerAdapter adapter;
-
-
-
-
+    private PlayerRecyclerAdapter adapter;
+    private ArrayList<Rule> rules = new ArrayList<>();
+    private RecyclerView ruleRecyclerView;
+    private RuleRecyclerAdapter ruleAdapter;
 
 
     @Override
@@ -185,10 +185,14 @@ public class DrinkingGameActivity extends AppCompatActivity {
         adapter = new PlayerRecyclerAdapter(playerNames);
         recyclerView = findViewById(R.id.recycler_view_players);
         managePlayersLayout = findViewById(R.id.manage_players_layout);
+        ruleLayout = findViewById(R.id.rules_layout);
         setAdapter();
         createQuestions();
         setUpNextButton();
-        newQuestion();
+
+        ruleRecyclerView = findViewById(R.id.rules_recycler_view);
+        ruleAdapter = new RuleRecyclerAdapter(rules);
+        setRuleAdapter();
 
         btnManagePlayers.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -228,7 +232,7 @@ public class DrinkingGameActivity extends AppCompatActivity {
             public void onClick(View v) {
                 menuShown = true;
                 helpLayout.setVisibility(View.VISIBLE);
-                btnCloseGame.setVisibility(View.VISIBLE);
+                btnCloseGame.setVisibility(View.INVISIBLE);
                 btnHelp.setVisibility(View.INVISIBLE);
                 btnManagePlayers.setText("╳");
                 btnManagePlayers.setWidth(40);
@@ -250,6 +254,15 @@ public class DrinkingGameActivity extends AppCompatActivity {
             }
         });
 
+        nextQuestion();
+    }
+
+    public void setRuleAdapter() {
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        ruleRecyclerView.setLayoutManager(layoutManager);
+        ruleRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        ruleRecyclerView.setAdapter(ruleAdapter);
+        rules = ruleAdapter.getRules();
     }
 
     public void setAdapter() {
@@ -287,7 +300,14 @@ public class DrinkingGameActivity extends AppCompatActivity {
     
 
 
-    private void newQuestion() {
+    private void nextQuestion() {
+        int x = 0;
+        while (playerNames.size() < 2) {
+            String name = getResources().getString(R.string.empty_name) + " " + x;
+            playerNames.add(new Player(name));
+            setAdapter();
+        }
+
         if (questionCounter < questions.size() && gameCounter < gameLength) {
             randomPlayer = playerNames.get(ThreadLocalRandom.current().nextInt(0, playerNames.size())).getName();
             randomPlayer2 = playerNames.get(ThreadLocalRandom.current().nextInt(0, playerNames.size())).getName();
@@ -296,6 +316,17 @@ public class DrinkingGameActivity extends AppCompatActivity {
                 randomPlayer2 = playerNames.get(ThreadLocalRandom.current().nextInt(0, playerNames.size())).getName();
             }
 
+            if (questions.get(questionCounter).isReturnRule()) {
+                rules.remove(questions.get(questionCounter).getRule());
+            } else if (questions.get(questionCounter).hasRule()) {
+                rules.add(questions.get(questionCounter).getRule());
+                setRuleAdapter();
+            }
+            if (rules.size() == 0) {
+                ruleLayout.setVisibility(View.INVISIBLE);
+            } else {
+                ruleLayout.setVisibility(View.VISIBLE);
+            }
 
             drinkingGameLayout.setBackgroundColor(Color.parseColor(questions.get(questionCounter).getColor()));
             type.setText(questions.get(questionCounter).getTitle());
@@ -311,8 +342,6 @@ public class DrinkingGameActivity extends AppCompatActivity {
             questionCounter++;
             gameCounter++;
         } else {
-            System.out.println("questionCounter:" + questionCounter + ", gameCounter:" + gameCounter + ", questions.size():" + questions.size());
-            System.out.println("Game finished");
             gameCounter = 0;
             finish();
         }
@@ -335,7 +364,7 @@ public class DrinkingGameActivity extends AppCompatActivity {
                 btnManagePlayers.setHeight(80);
             }
             else {
-                newQuestion();
+                nextQuestion();
             }
 
         });
@@ -346,7 +375,6 @@ public class DrinkingGameActivity extends AppCompatActivity {
     private void createQuestions() {
 
         if ((questionCounter + gameLength) > questions.size() || questions.size() == 0) {
-            System.out.println("Creating new questions");
             questions = new ArrayList<Question>();
             questionCounter = 0;
             InputStream rule = getResources().openRawResource(R.raw.rule);
@@ -377,7 +405,7 @@ public class DrinkingGameActivity extends AppCompatActivity {
                         String content = elements[3];
                         String returnTitle = null;
                         String returnContent = null;
-                        String ruleDisplay;
+                        String ruleDisplay = null;
                         int returnTime = 0;
                         boolean hasReturn = false;
 
@@ -395,11 +423,14 @@ public class DrinkingGameActivity extends AppCompatActivity {
                         Question newQuestion = new Question(questionGameMode, type, title, content);
                         if (hasReturn) {
                             newQuestion.setReturn(returnTitle, returnContent, returnTime);
+                            if (type.equals("Rule")) {
+                                newQuestion.setRule(new Rule(ruleDisplay));
+                                newQuestion.setHasRule(true);
+                            }
                         }
 
                         if (newQuestion.getGameMode().equals(gamemode)) {
                             questions.add(newQuestion);
-                            System.out.println("Question added");
                         }
 
                     }
@@ -415,20 +446,24 @@ public class DrinkingGameActivity extends AppCompatActivity {
             //Sets return questions
             for (int i = 0; i < questions.size(); i++) {
                 if(questions.get(i).ifHasReturn() && i + questions.get(i).getReturnTime() < questions.size()) {
-                    questions.add(i + questions.get(i).getReturnTime(), new Question(
+                    Question returnRule = new Question(
                             questions.get(i).getGameMode(),
                             questions.get(i).getType(),
                             questions.get(i).getReturnTitle(),
-                            questions.get(i).getReturnContent()));
+                            questions.get(i).getReturnContent());
+                    returnRule.setIsReturnRule(questions.get(i).getRule());
+                    questions.add(i + questions.get(i).getReturnTime(), returnRule);
                 }
                 else if (questions.get(i).ifHasReturn()) {
                     if (i + 3 < questions.size()) {
-                        gameLength += 2;
-                        questions.set(i + 2, new Question(
+                        Question returnRule = new Question(
                                 questions.get(i).getGameMode(),
                                 questions.get(i).getType(),
                                 questions.get(i).getReturnTitle(),
-                                questions.get(i).getReturnContent()));
+                                questions.get(i).getReturnContent());
+                        returnRule.setIsReturnRule(questions.get(i).getRule());
+                        gameLength += 2;
+                        questions.set(i + 2, returnRule);
                     }
                 }
             }

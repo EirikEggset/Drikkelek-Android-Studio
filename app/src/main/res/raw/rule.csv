@@ -1,3 +1,5 @@
-Warm up,Rule,Vors regel,Det er ikke lov å gjøre dette,Vors regel slutt,Man kan nå gjøre dette igjen,1,Ikke lov å gjøre dette
-Get drunk,Rule,Fylla regel,Drikk hver gang spiller1 gjør dette,Fylla regel slutt,Man kan nå gjøre dette igjen,1,Ikke lov å gjøre dette
-Heated,Rule,Drøy regel,Hvis spiller1 gjør dette må alle gjøre denne drøye tingen,Drøy regel slutt,Man kan nå gjøre dette igjen,1,Ikke lov å gjøre dette
+Warm up,Rule,Vors regel,Det er ikke lov å gjøre dette,Vors regel slutt,Man kan nå gjøre dette igjen,1,Regel 1 slutt
+Get drunk,Rule,Fylla regel 1,Drikk hver gang spiller1 gjør dette,Fylla regel 1 slutt,Man kan nå gjøre dette igjen,3,Regel 1
+Get drunk,Rule,Fylla regel 2,Drikk hver gang spiller1 gjør dette,Fylla regel 2 slutt,Man kan nå gjøre dette igjen,2,Regel 2
+Get drunk,Rule,Fylla regel 3,Drikk hver gang spiller1 gjør dette,Fylla regel 3 slutt,Man kan nå gjøre dette igjen,3,Regel 3
+Heated,Rule,Drøy regel,Hvis spiller1 gjør dette må alle gjøre denne drøye tingen,Drøy regel slutt,Man kan nå gjøre dette igjen,1,Regel 3
