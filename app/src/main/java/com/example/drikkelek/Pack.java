@@ -3,12 +3,10 @@ package com.example.drikkelek;
 public class Pack {
     private String packName;
     private String activityType;
-    private String[] files;
 
-    public Pack(String packName, String activityType, String[] files) {
+    public Pack(String packName, String activityType) {
         this.packName = packName;
         this.activityType = activityType;
-        this.files = files;
     }
 
     public void setPackName(String packName) {
@@ -21,9 +19,5 @@ public class Pack {
 
     public String getActivityType() {
         return activityType;
-    }
-
-    public String[] getFiles() {
-        return files;
     }
 }

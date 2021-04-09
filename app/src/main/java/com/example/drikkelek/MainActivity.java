@@ -46,9 +46,10 @@ public class MainActivity extends AppCompatActivity implements PackRecyclerAdapt
     }
 
     private void setUserInfo() {
-        packList.add(new Pack("Blanding", "DrinkingGame", new String[]{"category", "normal", "point", "rule", "thumbs_up_or_down"}));
-        packList.add(new Pack("100 Spørsmål", "100Questions", new String[]{"normal", "thumbs_up_or_down"}));
-        packList.add(new Pack("Terning", "Dice", new String[0]));
+        packList.add(new Pack("Blanding", "DrinkingGame"));
+        packList.add(new Pack("100 Spørsmål", "100Questions"));
+        packList.add(new Pack("Ring of Fire", "Ring of Fire"));
+        packList.add(new Pack("Terning", "Dice"));
     }
 
 
@@ -57,21 +58,28 @@ public class MainActivity extends AppCompatActivity implements PackRecyclerAdapt
         //Checks which activity to open
         String type = packList.get(position).getActivityType();
 
-        if (type.equals("DrinkingGame")) {
-            Intent intent = new Intent(this, DrinkingGameActivity.class);
-            intent.putExtra("gameType", "DrinkingGame");
-            startActivity(intent);
-        }
+        switch (type) {
+            case "DrinkingGame": {
+                Intent intent = new Intent(this, DrinkingGameActivity.class);
+                intent.putExtra("gameType", "DrinkingGame");
+                startActivity(intent);
+                break;
+            }
+            case "100Questions": {
+                Intent intent = new Intent(this, DrinkingGameActivity.class);
+                intent.putExtra("gameType", "100Questions");
+                startActivity(intent);
+                break;
+            }
+            case "Ring of Fire": {
 
-        if (type.equals("100Questions")) {
-            Intent intent = new Intent(this, DrinkingGameActivity.class);
-            intent.putExtra("gameType", "100Questions");
-            startActivity(intent);
-        }
-
-        if (type.equals("Dice")) {
-            Intent intent = new Intent(this, DiceActivity.class);
-            startActivity(intent);
+                break;
+            }
+            case "Dice": {
+                Intent intent = new Intent(this, DiceActivity.class);
+                startActivity(intent);
+                break;
+            }
         }
     }
 }

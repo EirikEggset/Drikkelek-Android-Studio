@@ -469,13 +469,20 @@ public class DrinkingGameActivity extends AppCompatActivity {
             //Decides if it is needed to read new questions
             int categoryIndex = 0;
             for (ArrayList<Question> arrayList : allIndividualQuestionArrays) {
-                if (arrayList.size() < categoriesNumber[categoryIndex++]) {
+                int questionCounter = 0;
+                for (Question question : arrayList) {
+                    if (question.getGameMode().equals(gamemode)) {
+                        questionCounter++;
+                    }
+                }
+                if (questionCounter < categoriesNumber[categoryIndex++]) {
                     reset = true;
                 }
             }
             categoryIndex = 0;
 
             if (!gameType.equals(lastGameType) || reset) {
+                System.out.println("New Questions");
                 InputStream rule = getResources().openRawResource(R.raw.rule);
                 InputStream thumbs = getResources().openRawResource(R.raw.thumbs_up_or_down);
                 InputStream point = getResources().openRawResource(R.raw.point);
@@ -568,6 +575,7 @@ public class DrinkingGameActivity extends AppCompatActivity {
                 Collections.shuffle(questionList); //Randomize order
                 for (int i = 0; i < categoriesNumber[categoryIndex]; i++) {
                     Collections.shuffle(questionList);
+                    int loopCounter = 0;
                     while (!questionList.get(0).getGameMode().equals(gamemode)) {
                         Collections.shuffle(questionList);
                     }
@@ -607,9 +615,10 @@ public class DrinkingGameActivity extends AppCompatActivity {
         }
 
         //100 Questions
-        else if (gameType.equals("100Questions") || ((gameLength > questions.size() || questions.size() == 0) && !gameType.equals(lastGameType))) {
+        else if (gameType.equals("100Questions")) {
             //TODO Implement 100 Questions drinking game
-            for (int i = 0; i < 50; i++) {
+            lastGameType = gameType;
+            for (int i = 1; i <= 100; i++) {
                 questions.add(new Question("100Questions", "Normal", "100 Spørsmål", "Question number " + i));
             }
         }
