@@ -28,13 +28,30 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class DrinkingGameActivity extends AppCompatActivity {
 
     //Config
-    private int gameLength = 40; //How many questions per game
+
+    //How many questions per game
+    private int gameLength = 20;
+    //Decides how often each category appears. Must add up to 20
+    long ruleNumber = 2;
+    long thumbsNumber = 4;
+    long pointNumber = 4;
+    long normalNumber = 6;
+    long categoryNumber = 4;
+
+    int[] categoriesNumber = {
+            (int) Math.floor((gameLength * ruleNumber * 0.05)),
+            (int) Math.floor((gameLength * thumbsNumber * 0.05)),
+            (int) Math.floor((gameLength * pointNumber * 0.05)),
+            (int) Math.floor((gameLength * normalNumber * 0.05)),
+            (int) Math.floor((gameLength * categoryNumber * 0.05))
+    };
 
 
     private Button btnContinue;
@@ -58,13 +75,30 @@ public class DrinkingGameActivity extends AppCompatActivity {
     private TextView content;
     private TextView error;
     private String gamemode = "Get drunk";
-    private static int questionCounter = 0; //What question you are on in the list of questions
+    private String gameType;
+    private static String lastGameType;
     private int gameCounter = 0; //What question you are in the particular game
 
-    private boolean menuShown = false;
-    private static ArrayList<Question> questions = new ArrayList<>();
+    //Questions-data
+    private ArrayList<Question> questions = new ArrayList<>();
+    private static ArrayList<Question> questionsCategory = new ArrayList<>();
+    private static ArrayList<Question> questionsNormal = new ArrayList<>();
+    private static ArrayList<Question> questionsPoint = new ArrayList<>();
+    private static ArrayList<Question> questionsRule = new ArrayList<>();
+    private static ArrayList<Question> questionsThumbs = new ArrayList<>();
     private static ArrayList<Player> playerNames = new ArrayList<>();
-    private InputStream[] categories;
+    private static ArrayList<ArrayList<Question>> allIndividualQuestionArrays = new ArrayList<>(Arrays.asList(
+            questionsCategory,
+            questionsNormal,
+            questionsPoint,
+            questionsRule,
+            questionsThumbs
+    ));
+
+
+
+    private boolean menuShown = false;
+
     private EditText[] playerViews;
     String randomPlayer;
     String randomPlayer2;
@@ -92,6 +126,8 @@ public class DrinkingGameActivity extends AppCompatActivity {
         btnWarmUp = findViewById(R.id.warm_up);
         btnGetDrunk = findViewById(R.id.get_drunk);
         btnHeated = findViewById(R.id.heated);
+
+        gameType = getIntent().getStringExtra("gameType");
 
         //Player recyclerView
         recyclerView = findViewById(R.id.recycler_view_players);
@@ -137,7 +173,7 @@ public class DrinkingGameActivity extends AppCompatActivity {
         btnWarmUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addPlayersLayout.setBackgroundColor(getResources().getColor(R.color.green));
+                addPlayersLayout.setBackgroundColor(getResources().getColor(R.color.yellow));
                 gamemode = "Warm up";
             }
         });
@@ -303,12 +339,13 @@ public class DrinkingGameActivity extends AppCompatActivity {
     private void nextQuestion() {
         int x = 0;
         while (playerNames.size() < 2) {
+            //TODO Fix bug where removing all players crashes game
             String name = getResources().getString(R.string.empty_name) + " " + x;
             playerNames.add(new Player(name));
             setAdapter();
         }
 
-        if (questionCounter < questions.size() && gameCounter < gameLength) {
+        if (gameCounter < gameLength && questions.size() != 0) {
             randomPlayer = playerNames.get(ThreadLocalRandom.current().nextInt(0, playerNames.size())).getName();
             randomPlayer2 = playerNames.get(ThreadLocalRandom.current().nextInt(0, playerNames.size())).getName();
 
@@ -316,21 +353,21 @@ public class DrinkingGameActivity extends AppCompatActivity {
                 randomPlayer2 = playerNames.get(ThreadLocalRandom.current().nextInt(0, playerNames.size())).getName();
             }
 
-            if (questions.get(questionCounter).isReturnRule()) {
-                rules.remove(questions.get(questionCounter).getRule());
-            } else if (questions.get(questionCounter).hasRule()) {
-                rules.add(questions.get(questionCounter).getRule());
-                setRuleAdapter();
+            if (questions.get(0).isReturnRule()) {
+                rules.remove(questions.get(0).getRule());
+            } else if (questions.get(0).hasRule()) {
+                rules.add(questions.get(0).getRule());
             }
+            setRuleAdapter();
             if (rules.size() == 0) {
                 ruleLayout.setVisibility(View.INVISIBLE);
             } else {
                 ruleLayout.setVisibility(View.VISIBLE);
             }
 
-            drinkingGameLayout.setBackgroundColor(Color.parseColor(questions.get(questionCounter).getColor()));
-            type.setText(questions.get(questionCounter).getTitle());
-            String questionContent = questions.get(questionCounter).getContent();
+            drinkingGameLayout.setBackgroundColor(Color.parseColor(questions.get(0).getColor()));
+            type.setText(questions.get(0).getTitle());
+            String questionContent = questions.get(0).getContent();
             if (questionContent.contains("spiller1")) {
                 questionContent = questionContent.replace("spiller1" , randomPlayer);
             }
@@ -339,7 +376,7 @@ public class DrinkingGameActivity extends AppCompatActivity {
             }
 
             content.setText(questionContent);
-            questionCounter++;
+            questions.remove(0);
             gameCounter++;
         } else {
             gameCounter = 0;
@@ -373,74 +410,116 @@ public class DrinkingGameActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private void createQuestions() {
+        boolean reset = false;
 
-        if ((questionCounter + gameLength) > questions.size() || questions.size() == 0) {
-            questions = new ArrayList<Question>();
-            questionCounter = 0;
-            InputStream rule = getResources().openRawResource(R.raw.rule);
-            InputStream thumbs = getResources().openRawResource(R.raw.thumbs_up_or_down);
-            InputStream point = getResources().openRawResource(R.raw.point);
-            InputStream normal = getResources().openRawResource(R.raw.normal);
-            InputStream category = getResources().openRawResource(R.raw.category);
-
-            InputStream is = getResources().openRawResource(R.raw.rule);
-
-            categories = new InputStream[]{rule, thumbs, point, normal, category};
-
-            String line = "";
-
-            for (InputStream file : categories) {
-
-                BufferedReader reader = new BufferedReader (
-                        new InputStreamReader(file, Charset.defaultCharset())
-                );
-
-                //Creates arrayList with questions
-                try {
-                    while ((line = reader.readLine()) != null) {
-                        String[] elements = line.split(",");
-                        String questionGameMode = elements[0];
-                        String type = elements[1];
-                        String title = elements[2];
-                        String content = elements[3];
-                        String returnTitle = null;
-                        String returnContent = null;
-                        String ruleDisplay = null;
-                        int returnTime = 0;
-                        boolean hasReturn = false;
-
-                        //Checks for return
-                        if(elements.length >= 7) {
-                            returnTitle = elements[4];
-                            returnContent = elements[5];
-                            returnTime= Integer.parseInt(elements[6]);
-                            hasReturn = true;
-                            if (type.equals("Rule")) {
-                                ruleDisplay = elements[7];
-                            }
-                        }
-
-                        Question newQuestion = new Question(questionGameMode, type, title, content);
-                        if (hasReturn) {
-                            newQuestion.setReturn(returnTitle, returnContent, returnTime);
-                            if (type.equals("Rule")) {
-                                newQuestion.setRule(new Rule(ruleDisplay));
-                                newQuestion.setHasRule(true);
-                            }
-                        }
-
-                        if (newQuestion.getGameMode().equals(gamemode)) {
-                            questions.add(newQuestion);
-                        }
-
-                    }
-                } catch (IOException e) {
-                    Log.wtf("DrinkingGame", "Error reading data file", e);
-                    e.printStackTrace();
+        if (gameType.equals("DrinkingGame")) {
+            //Decides if it is needed to read new questions
+            int categoryIndex = 0;
+            for (ArrayList<Question> arrayList : allIndividualQuestionArrays) {
+                if (arrayList.size() < categoriesNumber[categoryIndex++]) {
+                    reset = true;
                 }
             }
+            categoryIndex = 0;
 
-            //Randomize order
+            if (questions.size() <= gameLength || !gameType.equals(lastGameType) || reset) {
+                System.out.println("Nye spørsmål");
+                InputStream rule = getResources().openRawResource(R.raw.rule);
+                InputStream thumbs = getResources().openRawResource(R.raw.thumbs_up_or_down);
+                InputStream point = getResources().openRawResource(R.raw.point);
+                InputStream normal = getResources().openRawResource(R.raw.normal);
+                InputStream category = getResources().openRawResource(R.raw.category);
+
+                InputStream[] categories = new InputStream[]{rule, thumbs, point, normal, category};
+                ArrayList<Question> array = new ArrayList<>();
+
+                String line = "";
+
+                for (InputStream file : categories) {
+                    switch (categoryIndex++) {
+                        case 0:
+                            array = questionsRule;
+                            break;
+                        case 1:
+                            array = questionsThumbs;
+                            break;
+                        case 2:
+                            array = questionsPoint;
+                            break;
+                        case 3:
+                            array = questionsNormal;
+                            break;
+                        case 4:
+                            array = questionsCategory;
+                            break;
+                    }
+
+
+                    BufferedReader reader = new BufferedReader (
+                            new InputStreamReader(file, Charset.defaultCharset())
+                    );
+
+                    //Creates arrayList with questions
+                    try {
+                        while ((line = reader.readLine()) != null) {
+                            String[] elements = line.split(",");
+                            String questionGameMode = elements[0];
+                            String type = elements[1];
+                            String title = elements[2];
+                            String content = elements[3];
+                            String returnTitle = null;
+                            String returnContent = null;
+                            String ruleDisplay = null;
+                            int returnTime = 0;
+                            boolean hasReturn = false;
+
+                            //Checks for return
+                            if(elements.length >= 7) {
+                                returnTitle = elements[4];
+                                returnContent = elements[5];
+                                returnTime= Integer.parseInt(elements[6]);
+                                hasReturn = true;
+                                if (type.equals("Rule")) {
+                                    ruleDisplay = elements[7];
+                                }
+                            }
+
+                            Question newQuestion = new Question(questionGameMode, type, title, content);
+                            if (hasReturn) {
+                                newQuestion.setReturn(returnTitle, returnContent, returnTime);
+                                if (type.equals("Rule")) {
+                                    newQuestion.setRule(new Rule(ruleDisplay));
+                                    newQuestion.setHasRule(true);
+                                }
+                            }
+                            array.add(newQuestion);
+                        }
+                    } catch (IOException e) {
+                        Log.wtf("DrinkingGame", "Error reading data file", e);
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+            lastGameType = gameType;
+
+            questions = new ArrayList<>();
+            categoryIndex = 0;
+            //Adds questions to array questions
+            for (ArrayList<Question> questionList : allIndividualQuestionArrays) {
+                //Randomize order
+                Collections.shuffle(questionList);
+                for (int i = 0; i < categoriesNumber[categoryIndex]; i++) {
+                    while (!questionList.get(0).getGameMode().equals(gamemode)) {
+                        Collections.shuffle(questionList);
+                    }
+                    if (questionList.size() > 0) {
+                        questions.add(questionList.get(0));
+                        questionList.remove(0);
+                    }
+                }
+                categoryIndex++;
+            }
             Collections.shuffle(questions);
 
             //Sets return questions
@@ -467,6 +546,11 @@ public class DrinkingGameActivity extends AppCompatActivity {
                     }
                 }
             }
+        }
+
+        //100 Questions
+        else if (gameType.equals("100Questions") || ((gameLength > questions.size() || questions.size() == 0) && !gameType.equals(lastGameType))) {
+            //Implement 100 Questions drinking game
         }
     }
 

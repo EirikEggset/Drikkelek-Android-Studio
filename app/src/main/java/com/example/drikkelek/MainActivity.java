@@ -47,15 +47,10 @@ public class MainActivity extends AppCompatActivity implements PackRecyclerAdapt
 
     private void setUserInfo() {
         packList.add(new Pack("Blanding", "DrinkingGame", new String[]{"category", "normal", "point", "rule", "thumbs_up_or_down"}));
-        packList.add(new Pack("100 Spørsmål", "DrinkingGame", new String[]{"normal", "thumbs_up_or_down"}));
-        packList.add(new Pack("Pekelek", "DrinkingGame", new String[]{"point"}));
+        packList.add(new Pack("100 Spørsmål", "100Questions", new String[]{"normal", "thumbs_up_or_down"}));
         packList.add(new Pack("Terning", "Dice", new String[0]));
     }
 
-    private void openDrinkingGame() {
-        Intent intent = new Intent(this, DrinkingGameActivity.class);
-        startActivity(intent);
-    }
 
     @Override
     public void onPackClick(int position) {
@@ -64,6 +59,13 @@ public class MainActivity extends AppCompatActivity implements PackRecyclerAdapt
 
         if (type.equals("DrinkingGame")) {
             Intent intent = new Intent(this, DrinkingGameActivity.class);
+            intent.putExtra("gameType", "DrinkingGame");
+            startActivity(intent);
+        }
+
+        if (type.equals("100Questions")) {
+            Intent intent = new Intent(this, DrinkingGameActivity.class);
+            intent.putExtra("gameType", "100Questions");
             startActivity(intent);
         }
 
