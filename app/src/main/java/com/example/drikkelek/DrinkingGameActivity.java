@@ -224,7 +224,6 @@ public class DrinkingGameActivity extends AppCompatActivity {
         ruleLayout = findViewById(R.id.rules_layout);
         setAdapter();
         createQuestions();
-        setUpNextButton();
 
         ruleRecyclerView = findViewById(R.id.rules_recycler_view);
         ruleAdapter = new RuleRecyclerAdapter(rules);
@@ -235,21 +234,21 @@ public class DrinkingGameActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (menuShown) {
                     menuShown = false;
+                    btnManagePlayers.setBackground(getResources().getDrawable(R.drawable.legg_til));
                     managePlayersLayout.setVisibility(View.INVISIBLE);
                     helpLayout.setVisibility(View.INVISIBLE);
                     btnCloseGame.setVisibility(View.VISIBLE);
                     btnHelp.setVisibility(View.VISIBLE);
-                    btnManagePlayers.setText((getString(R.string.manage_players_btn)));
                     btnManagePlayers.setWidth(80);
                     btnManagePlayers.setHeight(80);
                     closeKeyboard(DrinkingGameActivity.this);
                 }
                 else {
                     menuShown = true;
+                    btnManagePlayers.setBackground(getResources().getDrawable(R.drawable.x_circled));
                     managePlayersLayout.setVisibility(View.VISIBLE);
                     btnCloseGame.setVisibility(View.INVISIBLE);
                     btnHelp.setVisibility(View.INVISIBLE);
-                    btnManagePlayers.setText("╳");
                     btnManagePlayers.bringToFront();
                     btnManagePlayers.setWidth(40);
                     btnManagePlayers.setHeight(40);
@@ -267,10 +266,10 @@ public class DrinkingGameActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 menuShown = true;
+                btnManagePlayers.setBackground(getResources().getDrawable(R.drawable.x_circled));
                 helpLayout.setVisibility(View.VISIBLE);
                 btnCloseGame.setVisibility(View.INVISIBLE);
                 btnHelp.setVisibility(View.INVISIBLE);
-                btnManagePlayers.setText("╳");
                 btnManagePlayers.setWidth(40);
                 btnManagePlayers.setHeight(40);
 
@@ -290,6 +289,7 @@ public class DrinkingGameActivity extends AppCompatActivity {
             }
         });
 
+        setUpNextButton();
         nextQuestion();
     }
 
@@ -344,7 +344,6 @@ public class DrinkingGameActivity extends AppCompatActivity {
             playerNames.add(new Player(name));
             setAdapter();
         }
-
         if (gameCounter < gameLength && questions.size() != 0) {
             randomPlayer = playerNames.get(ThreadLocalRandom.current().nextInt(0, playerNames.size())).getName();
             randomPlayer2 = playerNames.get(ThreadLocalRandom.current().nextInt(0, playerNames.size())).getName();
@@ -391,12 +390,12 @@ public class DrinkingGameActivity extends AppCompatActivity {
         btnNextQuestion.setOnClickListener(v -> {
             if (menuShown) {
                 closeKeyboard(this);
+                btnManagePlayers.setBackground(getResources().getDrawable(R.drawable.legg_til));
                 menuShown = false;
                 managePlayersLayout.setVisibility(View.INVISIBLE);
                 helpLayout.setVisibility(View.INVISIBLE);
                 btnCloseGame.setVisibility(View.VISIBLE);
                 btnHelp.setVisibility(View.VISIBLE);
-                btnManagePlayers.setText((getString(R.string.manage_players_btn)));
                 btnManagePlayers.setWidth(80);
                 btnManagePlayers.setHeight(80);
             }
@@ -411,6 +410,7 @@ public class DrinkingGameActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private void createQuestions() {
         boolean reset = false;
+        questions = new ArrayList<>();
 
         if (gameType.equals("DrinkingGame")) {
             //Decides if it is needed to read new questions
@@ -422,7 +422,7 @@ public class DrinkingGameActivity extends AppCompatActivity {
             }
             categoryIndex = 0;
 
-            if (questions.size() <= gameLength || !gameType.equals(lastGameType) || reset) {
+            if (!gameType.equals(lastGameType) || reset) {
                 System.out.println("Nye spørsmål");
                 InputStream rule = getResources().openRawResource(R.raw.rule);
                 InputStream thumbs = getResources().openRawResource(R.raw.thumbs_up_or_down);
@@ -497,19 +497,25 @@ public class DrinkingGameActivity extends AppCompatActivity {
                     } catch (IOException e) {
                         Log.wtf("DrinkingGame", "Error reading data file", e);
                         e.printStackTrace();
+                    } finally {
+                        try {
+                            reader.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
 
             }
             lastGameType = gameType;
 
-            questions = new ArrayList<>();
             categoryIndex = 0;
-            //Adds questions to array questions
+
+            //Adds questions to questions-array
             for (ArrayList<Question> questionList : allIndividualQuestionArrays) {
-                //Randomize order
-                Collections.shuffle(questionList);
+                Collections.shuffle(questionList); //Randomize order
                 for (int i = 0; i < categoriesNumber[categoryIndex]; i++) {
+                    Collections.shuffle(questionList);
                     while (!questionList.get(0).getGameMode().equals(gamemode)) {
                         Collections.shuffle(questionList);
                     }
