@@ -26,6 +26,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -79,8 +80,6 @@ public class DrinkingGameActivity extends AppCompatActivity {
     private static String lastGameType;
     private int gameCounter = 0; //What question you are in the particular game
 
-    //100Questions
-    private TextView counterView;
 
     //Questions-data
     private ArrayList<Question> questions = new ArrayList<>();
@@ -97,6 +96,11 @@ public class DrinkingGameActivity extends AppCompatActivity {
             questionsRule,
             questionsThumbs
     ));
+
+
+    //100Questions
+    private TextView counterView;
+    private static ArrayList<Question> allQuestions = new ArrayList<>();
 
 
 
