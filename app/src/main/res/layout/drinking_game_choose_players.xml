@@ -11,7 +11,6 @@
     android:fitsSystemWindows="false"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent">
@@ -21,58 +20,76 @@
         android:id="@+id/close_keyboard"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="-157dp"
-        tools:layout_editor_absoluteY="16dp"
-        tools:visibility="invisible"/>
+        android:padding="10dp"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp"
+        tools:visibility="invisible">
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginBottom="40dp"
+        android:background="@color/main_accent"
+        android:padding="0dp"
+        android:translationZ="-2dp"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_add_player"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/get_drunk"
         android:layout_width="120dp"
         android:layout_height="80dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginBottom="8dp"
         android:background="@drawable/game_mode_center_button"
         android:gravity="center"
         android:text="@string/get_drunk_button"
         android:textColor="@color/white"
         android:textSize="15sp"
+        app:layout_constraintBottom_toTopOf="@id/btn_drinking_game_continue"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/table_players" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/heated"
         android:layout_width="100dp"
         android:layout_height="80dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/game_mode_right_button"
 
+        android:background="@drawable/game_mode_right_button"
         android:gravity="center"
         android:text="@string/heat_button"
         android:textColor="@color/white"
         android:textSize="15sp"
         app:layout_constraintStart_toEndOf="@+id/get_drunk"
-        app:layout_constraintTop_toBottomOf="@+id/table_players" />
+        app:layout_constraintTop_toTopOf="@+id/get_drunk" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/warm_up"
         android:layout_width="100dp"
         android:layout_height="80dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/game_mode_left_button"
 
+        android:background="@drawable/game_mode_left_button"
         android:gravity="center"
         android:text="@string/warm_up_button"
         android:textColor="@color/white"
         android:textSize="15sp"
         app:layout_constraintEnd_toStartOf="@+id/get_drunk"
-        app:layout_constraintTop_toBottomOf="@+id/table_players" />
+        app:layout_constraintTop_toTopOf="@+id/get_drunk" />
 
     <TextView
         android:id="@+id/title_how_many_players"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/actor"
+        android:shadowColor="#050303"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:shadowRadius="2"
         android:text="@string/how_many_players_title"
         android:textAllCaps="false"
         android:textColor="@color/white"
@@ -82,16 +99,66 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <fragment
+        android:id="@+id/fragment2"
+        android:name="com.example.drikkelek.manage_players_fragment"
+        android:layout_width="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/textView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_height="wrap_content"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintHeight_max="600dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add_players_error"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_add_player"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="@drawable/blue_circle"
+        android:gravity="center"
+        android:paddingRight="20dp"
+        android:paddingBottom="10dp"
+        android:text="+"
+        android:textColor="@color/white"
+        android:textSize="25dp"
+        android:translationZ="5dp"
+        app:layout_constraintBottom_toTopOf="@+id/get_drunk"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/add_players_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="0dp"
+        android:shadowColor="#000000"
+        android:shadowDx="5"
+        android:shadowDy="5"
+        android:shadowRadius="1"
+        android:textAlignment="center"
+        android:textColor="@color/purple_700"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title_how_many_players"
+        tools:text="Error-melding" />
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_drinking_game_continue"
         android:layout_width="300dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
 
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="10dp"
         android:angle="90"
-
         android:background="@drawable/rounded_square"
-        android:fitsSystemWindows="false"
+        android:shadowColor="#3F51B5"
+        android:shadowDx="5"
+        android:shadowDy="5"
+        android:shadowRadius="5"
         android:text="@string/continue_btn"
         android:textColor="@color/white"
         android:textSize="18sp"
@@ -100,188 +167,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_add_player"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginBottom="50dp"
-        android:background="@drawable/circle"
-        android:gravity="center"
-        android:paddingRight="20dp"
-        android:paddingBottom="10dp"
-        android:text="+"
-        android:textColor="@color/white"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="@+id/btn_drinking_game_continue"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-    <TableLayout
-        android:id="@+id/table_players"
-        android:layout_width="301dp"
-        android:layout_height="446dp"
-        android:layout_marginTop="40dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title_how_many_players">
-
-        <EditText
-            android:id="@+id/player_name_1"
-            style="@style/player_name_style"
-            android:layout_width="wrap_content"
-            android:autofillHints=""
-            android:background="@drawable/rounded_square"
-            android:capitalize="characters"
-            android:ems="10"
-            android:imeOptions="actionNext"
-            android:inputType="textCapWords"
-            android:maxLines="1"
-            tools:layout_editor_absoluteX="106dp"
-            tools:layout_editor_absoluteY="192dp" />
-
-        <EditText
-            android:id="@+id/player_name_2"
-            style="@style/player_name_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:autofillHints=""
-            android:background="@drawable/rounded_square"
-            android:ems="10"
-            android:imeOptions="actionNext"
-            android:inputType="textCapWords"
-            android:maxLines="1"
-            tools:layout_editor_absoluteX="106dp"
-            tools:layout_editor_absoluteY="192dp" />
-
-        <EditText
-            android:id="@+id/player_name_3"
-            style="@style/player_name_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:autofillHints=""
-            android:ems="10"
-            android:imeOptions="actionNext"
-            android:inputType="textCapWords"
-            android:maxLines="1"
-            android:visibility="invisible"
-            tools:layout_editor_absoluteX="106dp"
-            tools:layout_editor_absoluteY="192dp"
-            tools:visibility="visible" />
-
-        <EditText
-            android:id="@+id/player_name_4"
-            style="@style/player_name_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:autofillHints=""
-            android:ems="10"
-            android:imeOptions="actionNext"
-            android:inputType="textCapWords"
-            android:maxLines="1"
-            android:visibility="gone"
-            tools:layout_editor_absoluteX="106dp"
-            tools:layout_editor_absoluteY="192dp"
-            tools:visibility="visible" />
-
-        <EditText
-            android:id="@+id/player_name_5"
-            style="@style/player_name_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:autofillHints=""
-            android:ems="10"
-            android:imeOptions="actionNext"
-            android:inputType="textCapWords"
-            android:maxLines="1"
-            android:visibility="gone"
-            tools:layout_editor_absoluteX="106dp"
-            tools:layout_editor_absoluteY="192dp"
-            tools:visibility="visible" />
-
-        <EditText
-            android:id="@+id/player_name_6"
-            style="@style/player_name_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:autofillHints=""
-            android:visibility="gone"
-            tools:layout_editor_absoluteX="106dp"
-            tools:layout_editor_absoluteY="192dp"
-            tools:visibility="visible" />
-
-        <EditText
-            android:id="@+id/player_name_7"
-            style="@style/player_name_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:autofillHints=""
-            android:ems="10"
-            android:imeOptions="actionNext"
-            android:inputType="textCapWords"
-            android:maxLines="1"
-            android:visibility="gone"
-            tools:layout_editor_absoluteX="106dp"
-            tools:layout_editor_absoluteY="192dp"
-            tools:visibility="visible" />
-
-        <EditText
-            android:id="@+id/player_name_8"
-            style="@style/player_name_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:autofillHints=""
-            android:ems="10"
-            android:imeOptions="actionNext"
-            android:inputType="textCapWords"
-            android:maxLines="1"
-            android:visibility="gone"
-            tools:layout_editor_absoluteX="106dp"
-            tools:layout_editor_absoluteY="192dp"
-            tools:visibility="visible" />
-
-        <EditText
-            android:id="@+id/player_name_9"
-            style="@style/player_name_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:autofillHints=""
-            android:ems="10"
-            android:imeOptions="actionNext"
-            android:inputType="textCapWords"
-            android:maxLines="1"
-            android:visibility="gone"
-            tools:layout_editor_absoluteX="106dp"
-            tools:layout_editor_absoluteY="192dp"
-            tools:visibility="visible" />
-
-        <EditText
-            android:id="@+id/player_name_10"
-            style="@style/player_name_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:autofillHints=""
-            android:ems="10"
-            android:imeOptions="actionDone"
-            android:inputType="textCapWords"
-            android:maxLines="1"
-            android:visibility="gone"
-            tools:layout_editor_absoluteX="106dp"
-            tools:layout_editor_absoluteY="192dp"
-            tools:visibility="visible" />
-
-
-    </TableLayout>
-
-    <TextView
-        android:id="@+id/add_players_error"
-        android:layout_width="300dp"
-        android:layout_height="22dp"
-        android:textAlignment="textEnd"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toTopOf="@+id/table_players"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title_how_many_players" />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

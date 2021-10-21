@@ -1,3 +1,54 @@
-Warm up,Rule,Vors,Det er ikke lov å gjøre dette
-Get drunk,Rule,Fylla,Drikk hver gang spiller1 gjør dette
-Heated,Rule,Drøy regel,Hvis spiller1 gjør dette må alle gjøre denne drøye tingen
+Warm up,Rule,Vors regel,Det er ikke lov å gjøre dette,Vors regel slutt,Man kan nå gjøre dette igjen,1,Regel 1 slutt
+Warm up,Rule,Vors regel,Det er ikke lov å gjøre dette,Vors regel slutt,Man kan nå gjøre dette igjen,1,Regel 1 slutt
+Warm up,Rule,Vors regel,Det er ikke lov å gjøre dette,Vors regel slutt,Man kan nå gjøre dette igjen,1,Regel 1 slutt
+Warm up,Rule,Vors regel,Det er ikke lov å gjøre dette,Vors regel slutt,Man kan nå gjøre dette igjen,1,Regel 1 slutt
+Warm up,Rule,Vors regel,Det er ikke lov å gjøre dette,Vors regel slutt,Man kan nå gjøre dette igjen,1,Regel 1 slutt
+Get drunk,Rule,Fylla regel 1,Drikk hver gang spiller1 gjør dette,Fylla regel 1 slutt,Man kan nå gjøre dette igjen,3,Regel 1
+Get drunk,Rule,Fylla regel 2,Drikk hver gang spiller1 gjør dette,Fylla regel 2 slutt,Man kan nå gjøre dette igjen,2,Regel 2
+Get drunk,Rule,Fylla regel 3,Drikk hver gang spiller1 gjør dette,Fylla regel 3 slutt,Man kan nå gjøre dette igjen,3,Regel 3
+Get drunk,Rule,Fylla regel 1,Drikk hver gang spiller1 gjør dette,Fylla regel 1 slutt,Man kan nå gjøre dette igjen,3,Regel 1
+Get drunk,Rule,Fylla regel 2,Drikk hver gang spiller1 gjør dette,Fylla regel 2 slutt,Man kan nå gjøre dette igjen,2,Regel 2
+Get drunk,Rule,Fylla regel 3,Drikk hver gang spiller1 gjør dette,Fylla regel 3 slutt,Man kan nå gjøre dette igjen,3,Regel 3
+Heated,Rule,Drøy regel,Hvis spiller1 gjør dette må alle gjøre denne drøye tingen,Drøy regel slutt,Man kan nå gjøre dette igjen,1,Regel 3
+Heated,Rule,Drøy regel,Hvis spiller1 gjør dette må alle gjøre denne drøye tingen,Drøy regel slutt,Man kan nå gjøre dette igjen,1,Regel 3
+Heated,Rule,Drøy regel,Hvis spiller1 gjør dette må alle gjøre denne drøye tingen,Drøy regel slutt,Man kan nå gjøre dette igjen,1,Regel 3
+Heated,Rule,Drøy regel,Hvis spiller1 gjør dette må alle gjøre denne drøye tingen,Drøy regel slutt,Man kan nå gjøre dette igjen,1,Regel 3
+Heated,Rule,Drøy regel,Hvis spiller1 gjør dette må alle gjøre denne drøye tingen,Drøy regel slutt,Man kan nå gjøre dette igjen,1,Regel 3
+Warm up,Normal,Vors,spiller1 må gjøre dette mot spiller2
+Warm up,Normal,Vors,spiller1 må gjøre dette mot spiller2
+Warm up,Normal,Vors,spiller1 må gjøre dette mot spiller2
+Get drunk,Normal,Tittel,spiller1 har du noen ganger?
+Get drunk,Normal,Tittel,spiller1 har du noen ganger?
+Get drunk,Normal,Tittel,spiller1 har du noen ganger?
+Get drunk,Normal,Fylla,spiller1 får lov til dette
+Get drunk,Normal,Tittel,spiller1 har du noen ganger?
+Get drunk,Normal,Tittel,spiller1 har du noen ganger?
+Get drunk,Normal,Tittel,spiller1 har du noen ganger?
+Get drunk,Normal,Fylla,spiller1 får lov til dette
+Heated,Normal,Tomt,Et drøyt spørsmål til spiller1
+Heated,Normal,Tomt,En veldig drøy dare til spiller1
+Heated,Normal,Tomt,Et drøyt spørsmål til spiller1
+Heated,Normal,Tomt,En veldig drøy dare til spiller1
+Heated,Normal,Neste rundes drøyt,Hvem har gjort dette?,Retur drøye,De som ikke har gjort det må gjøre dette,1
+Heated,Normal,Test,spiller1
+Heated,Normal,,spiller1
+Heated,Normal,Test,spiller1
+Warm up,Normal,Vors,spiller1 må gjøre dette mot spiller2
+Warm up,Normal,Vors,spiller1 må gjøre dette mot spiller2
+Warm up,Normal,Vors,spiller1 må gjøre dette mot spiller2
+Get drunk,Normal,Tittel,spiller1 har du noen ganger?
+Get drunk,Normal,Tittel,spiller1 har du noen ganger?
+Get drunk,Normal,Tittel,spiller1 har du noen ganger?
+Get drunk,Normal,Fylla,spiller1 får lov til dette
+Get drunk,Normal,Tittel,spiller1 har du noen ganger?
+Get drunk,Normal,Tittel,spiller1 har du noen ganger?
+Get drunk,Normal,Tittel,spiller1 har du noen ganger?
+Get drunk,Normal,Fylla,spiller1 får lov til dette
+Heated,Normal,Tomt,Et drøyt spørsmål til spiller1
+Heated,Normal,Tomt,En veldig drøy dare til spiller1
+Heated,Normal,Tomt,Et drøyt spørsmål til spiller1
+Heated,Normal,Tomt,En veldig drøy dare til spiller1
+Heated,Normal,Neste rundes drøyt,Hvem har gjort dette?,Retur drøye,De som ikke har gjort det må gjøre dette,1
+Heated,Normal,Test,spiller1
+Heated,Normal,,spiller1
+Heated,Normal,Test,spiller1

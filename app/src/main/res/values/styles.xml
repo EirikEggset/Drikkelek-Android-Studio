@@ -3,7 +3,7 @@
 
     <style name="pack_style">
         <item name="android:layout_width">270dp</item>
-        <item name="android:layout_height">90dp</item>
+        <item name="android:layout_height">140dp</item>
         <item name="android:background">@drawable/pack</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">25sp</item>
@@ -17,7 +17,7 @@
 
     <style name="player_name_style">
         <item name="android:ems">10</item>
-        <item name="android:imeOptions">actionNext</item>
+        <item name="android:imeOptions">actionDone</item>
         <item name="android:inputType">textCapWords</item>
         <item name="android:maxLines">1</item>
         <item name="android:background">@drawable/rounded_square</item>
@@ -26,6 +26,8 @@
         <item name="android:textColorHint">#CBCBCB</item>
         <item name="android:hint">@string/add_name</item>
         <item name="android:fontFamily">@font/actor</item>
+        <item name="android:textSize">25dp</item>
+        <item name="android:gravity">center</item>
 
 
 

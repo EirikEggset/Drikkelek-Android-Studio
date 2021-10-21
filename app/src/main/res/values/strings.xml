@@ -4,6 +4,13 @@
     <string name="title_main">Velg et spill</string>
     <string name="drinking_game_btn">Blanding</string>
 
+    <!--  -->
+
+    <!-- Choose players -->
+    <string-array name="Names">
+
+    </string-array>
+
     <!-- Drinking game -->
     <string name="how_many_players_title">Legg til spillere</string>
     <string name="add_name">Skriv inn navn...</string>
@@ -12,4 +19,68 @@
     <string name="heat_button">Drøy</string>
     <string name="warm_up_button">Vorset</string>
     <string name="get_drunk_button">Fylla</string>
+    <string name="dice_title">Terning</string>
+    <string name="manage_players_btn">👤</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="btn_help">❓</string>
+    <string name="current_rules_title">Regler</string>
+    <string name="empty_name">spiller</string>
+
+    <!-- Kings Cup -->
+    <string name="card_king">
+        Fyll felleskoppen en tredjedel med drinken din
+    </string>
+    <string name="card_king_last">
+        Spillet er ferdig, den som trakk dette kortet må drikke opp fra felleskoppen
+    </string>
+    <string name="card_2">
+        Du kan velge noen i rommet som må drikke
+    </string>
+    <string name="card_3">
+        Du må drikke en slurk selv
+    </string>
+    <string name="card_4">
+        Alle jenter i spillet må drikke
+    </string>
+    <string name="card_5">
+        Spilleren som trakk kortet kan putte tommelen på bordet når som helst. Den siste personen i
+        spillet som etter dette putter tommelen sin på bordet må drikke. Han kan gjøre dette frem
+        til neste 5 blir valgt
+    </string>
+    <string name="card_6">
+        Alle gutter i spillet må drikke
+    </string>
+    <string name="card_7">
+        Spilleren som trakk kortet her kan når som helst peke opp i luften. Da må den siste personen
+         i rommet som peker opp i luften drikke
+    </string>
+    <string name="card_8">
+        Spilleren må velge en annen person i rommet. Hver gang en av de to må drikke må den andre
+        også drikke
+    </string>
+    <string name="card_9">
+        Spilleren sier et valgfritt ord. Deretter må alle andre i spillet si et ord som rimer på tur.
+        Ingen ord kan gjentas, den som ikke kommer på noe eller sier noe som allerede er sagt, må
+        drikke
+    </string>
+    <string name="card_10">
+        Spilleren tenker på en valgfri kategori (for eksempel biler, alkohol-merker osv..). Deretter
+        må de andre spillerene si et ord innenfor kategorien her på tur. Ingen ord kan gjentas, den
+        som ikke kommer på noe, eller sier noe som allerede er sagt må drikke
+    </string>
+    <string name="card_j">
+        Spilleren som trakk kortet her kan lage en valgfri regel (for eksempel ikke lov å si fornavn)
+        den som bryter regelen må drikke. Regelen varer ut spillet
+    </string>
+    <string name="card_q">
+        Den som svarer på et spørsmål fra den som trakk kortet må drikke. Dette varer helt til neste
+        dronning blir trukket
+    </string>
+    <string name="card_a">
+        Waterfall. Alle må kontinuerlig drikke fra drikken sin, man kan bare stoppe når den som
+        sitter til høyre for deg er ferdig. Den som trakk kortet starter
+    </string>
+    <string name="kings_cup_start_text">Trykk på kortet for å starte</string>
+
+
 </resources>

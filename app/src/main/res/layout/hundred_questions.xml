@@ -19,7 +19,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.19" />
+        app:layout_constraintVertical_bias="0.19999999" />
+
+    <TextView
+        android:id="@+id/counter_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="1/40"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/content_view"
@@ -35,24 +47,24 @@
         app:layout_constraintTop_toBottomOf="@+id/type_view"
         app:layout_constraintVertical_bias="0.0" />
 
-    <Button
-        android:id="@+id/btn_next_question"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:alpha="0"
-        android:translationZ="-1dp"
-        tools:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/content_view" />
+    dp    <Button
+    android:id="@+id/btn_next_question"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:alpha="0"
+    android:translationZ="-1dp"
+    tools:visibility="gone"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.0"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/content_view" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/manage_players_layout"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="35dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="100dp"
         android:layout_marginEnd="35dp"
         android:layout_marginBottom="100dp"
         android:background="@drawable/gray_square"
@@ -70,7 +82,7 @@
         <fragment
             android:id="@+id/manage_players_fragment"
             android:name="com.example.drikkelek.manage_players_fragment"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_marginTop="35dp"
             android:maxWidth="300dp"
             android:translationZ="3dp"
@@ -82,7 +94,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0"
-            app:layout_constrainedWidth="true" />
+            app:layout_constraintWidth_default="wrap" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_add_player"
@@ -106,11 +118,11 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/help_layout"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="35dp"
-        android:layout_marginTop="60dp"
-        android:layout_marginEnd="35dp"
-        android:layout_marginBottom="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="50dp"
         android:background="@drawable/gray_square"
         android:padding="20dp"
         android:translationZ="2dp"
@@ -166,54 +178,25 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintWidth_min="wrap" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:translationZ="100dp"
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_help"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/help"
+        android:gravity="center"
+        android:padding="5dp"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="@color/black"
+        android:textSize="15dp"
+        android:translationZ="2dp"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_manage_players"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_help"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="10dp"
-            android:background="@drawable/help"
-            android:gravity="center"
-            android:padding="5dp"
-            android:textAlignment="center"
-            android:textAllCaps="true"
-            android:textColor="@color/black"
-            android:textSize="15dp"
-            android:translationZ="2dp"
-            app:layout_constraintBottom_toBottomOf="@+id/btn_manage_players"
-            app:layout_constraintEnd_toStartOf="@+id/btn_manage_players"
-            app:layout_constraintHeight_min="wrap"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/btn_manage_players"
-            app:layout_constraintWidth_min="wrap" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_manage_players"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="15dp"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/add_circled"
-            android:gravity="center"
-            android:padding="5dp"
-            android:textAlignment="center"
-            android:textAllCaps="true"
-            android:textColor="@color/black"
-            android:textSize="15sp"
-            android:translationZ="10dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_constraintHeight_min="wrap"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_min="wrap" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/rules_layout"

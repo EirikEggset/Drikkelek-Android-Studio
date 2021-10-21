@@ -2,18 +2,22 @@ package com.example.drikkelek;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.Timer;
+import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements PackRecyclerAdapter.OnPackListener {
     private Button btnDrinkingGame;
+    private ArrayList<Pack> packList;
+    private RecyclerView recyclerView;
 
 
     @Override
@@ -25,22 +29,58 @@ public class MainActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.main_menu);
+        recyclerView = findViewById(R.id.recycler_view_packs);
+        packList = new ArrayList<>();
 
-
-        btnDrinkingGame = findViewById((R.id.btn_drinking_game));
-
-        btnDrinkingGame.setOnClickListener(new View.OnClickListener(){
-
-            @Override
-            public void onClick(View v) {
-                openDrinkingGame();
-            }
-        });
+        setUserInfo();
+        setAdapter();
 
     }
 
-    private void openDrinkingGame() {
-        Intent intent = new Intent(this, DrinkingGame.class);
-        startActivity(intent);
+    private void setAdapter() {
+        PackRecyclerAdapter adapter = new PackRecyclerAdapter(packList, this);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(adapter);
+    }
+
+    private void setUserInfo() {
+        packList.add(new Pack("Blanding", "DrinkingGame"));
+        packList.add(new Pack("100 Spørsmål", "100Questions"));
+        packList.add(new Pack("Ring of Fire", "Ring of Fire"));
+        packList.add(new Pack("Terning", "Dice"));
+    }
+
+
+    @Override
+    public void onPackClick(int position) {
+        //Checks which activity to open
+        String type = packList.get(position).getActivityType();
+
+        switch (type) {
+            case "DrinkingGame": {
+                Intent intent = new Intent(this, DrinkingGameActivity.class);
+                intent.putExtra("gameType", "DrinkingGame");
+                startActivity(intent);
+                break;
+            }
+            case "100Questions": {
+                Intent intent = new Intent(this, DrinkingGameActivity.class);
+                intent.putExtra("gameType", "100Questions");
+                startActivity(intent);
+                break;
+            }
+            case "Ring of Fire": {
+                Intent intent = new Intent(this, RingOfFireActivity.class);
+                startActivity(intent);
+                break;
+            }
+            case "Dice": {
+                Intent intent = new Intent(this, DiceActivity.class);
+                startActivity(intent);
+                break;
+            }
+        }
     }
 }
