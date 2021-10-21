@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.drikkelek">
+    <uses-feature android:glEsVersion="0x00030001" android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -9,19 +10,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Drikkelek">
+        <activity android:name=".RingOfFireActivity"></activity>
         <activity
             android:name=".DiceActivity"
             android:theme="@style/Theme.Drikkelek" />
         <activity
             android:name=".DrinkingGameActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/title_activity_drinking_game"
             android:theme="@style/Theme.Drikkelek"
-            android:windowSoftInputMode="adjustPan"
-            android:configChanges="orientation|screenSize|keyboardHidden"/>
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".MainActivity"
             android:theme="@style/Theme.Drikkelek">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -219,9 +219,9 @@ public class DrinkingGameActivity extends AppCompatActivity {
         }
 
     }
-    
+
+    //Sets up new layout and variables for the first time
     public void drinkingGameOnStart() {
-        //Sets up new layout and variables
         type =  findViewById(R.id.type_view);
         content = findViewById((R.id.content_view));
         drinkingGameLayout = findViewById(R.id.drinking_game_constraint_layout);

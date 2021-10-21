@@ -72,7 +72,8 @@ public class MainActivity extends AppCompatActivity implements PackRecyclerAdapt
                 break;
             }
             case "Ring of Fire": {
-
+                Intent intent = new Intent(this, RingOfFireActivity.class);
+                startActivity(intent);
                 break;
             }
             case "Dice": {
